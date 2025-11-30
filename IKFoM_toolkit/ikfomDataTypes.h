@@ -1,10 +1,10 @@
 //
 // Created by dzl on 2025/11/21.
 //
-#include "IKFoM_toolkit/esekfom/esekfom.hpp"
+
 #ifndef FASTLIO_QT_IKFOMDATATYPES_H
 #define FASTLIO_QT_IKFOMDATATYPES_H
-
+#include "esekfom/esekfom.hpp"
 
 
 typedef MTK::vect<3, double> vect3;

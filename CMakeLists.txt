@@ -78,19 +78,19 @@ find_package(Eigen3 REQUIRED)
 message(Eigen: ${EIGEN3_INCLUDE_DIR})
 
 add_executable(fastlio_qt main.cpp
-        dataTypes.h
+        Msgs/dataTypes.h
         messageReceiver.cpp
         messageReceiver.h
-        MainWorker.cpp
-        MainWorker.h
+        SLAM/FastLio/MainWorker.cpp
+        SLAM/FastLio/MainWorker.h
         Preprocess.cpp
         Preprocess.h
         ImuProcess.cpp
         ImuProcess.h
-        ikfomDataTypes.h
+        IKFoM_toolkit/ikfomDataTypes.h
         ikd-Tree/ikd_Tree.cpp
         ikd-Tree/ikd_Tree.h
-        Exp_Math.h
+        tools/Exp_Math.h
         Display.cpp
         Display.h
 #        widget3d/EzQVTKInteractor.cxx widget3d/EzQVTKInteractor.h
@@ -99,6 +99,12 @@ add_executable(fastlio_qt main.cpp
 #        widget3d/EzQVTKRenderWindowAdapter.cxx widget3d/EzQVTKRenderWindowAdapter.h
 #        widget3d/EzQVTKInteractorInternal.h
         mainwindow.ui
+        SLAM/LioBase.cpp
+        SLAM/LioBase.h
+        Sensors/SensorType.h
+        tools/utills.h
+        Sensors/SensorBase.h
+        SLAM/AlgorithmMainBase.h
 
 
 )
@@ -116,7 +122,11 @@ vtk_module_autoinit(
 
 
 
+#find_package(Ceres CONFIG REQUIRED)
+#target_link_libraries(main PRIVATE Ceres::ceres)
 
+#find_package(GTSAM CONFIG REQUIRED)
+#target_link_libraries(main PRIVATE gtsam)
 
-
-
+#find_package(g2o CONFIG REQUIRED)
+#target_link_libraries(main PRIVATE g2o::core g2o::stuff g2o::types_icp g2o::types_sba)

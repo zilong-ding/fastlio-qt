@@ -5,7 +5,7 @@
 #ifndef FASTLIO_QT_DATATYPES_H
 #define FASTLIO_QT_DATATYPES_H
 
-#include <cstdint>
+
 #include <nlohmann/json.hpp>
 #include <cstdint>
 #include <string>
@@ -188,21 +188,25 @@ struct TwistWithCovariance {
     # In order, the parameters are:
     # (x, y, z, rotation about X axis, rotation about Y axis, rotation about Z axis)
 */
-    std::vector<double> covariance; // len=36
+    std::vector<double> covariance = std::vector<double>(36,0.0); // len=36
 };
 
 struct IMU {
     Header header;
     Quaternion orientation;
-    std::vector<double> orientation_covariance; // len=9, though not used in to_dict()
+    std::vector<double> orientation_covariance = std::vector<double>(9,0.0); // len=9, though not used in to_dict()
     Vector3 angular_velocity;
-    std::vector<double> angular_velocity_covariance; // len=9
+    std::vector<double> angular_velocity_covariance = std::vector<double>(9,0.0); // len=9
     Vector3 linear_acceleration;
-    std::vector<double> linear_acceleration_covariance; // len=9
+    std::vector<double> linear_acceleration_covariance = std::vector<double>(9,0.0); // len=9
 
     // Helper accessors
     double timestamp() const { return header.stamp; }
     const std::string& frame() const { return header.frame_id; }
+
+    using Ptr = std::shared_ptr<IMU>;
+    using ConstPtr = std::shared_ptr<const IMU>;
+    using UniquePtr = std::unique_ptr<IMU>;
 
     // Only fields in to_dict() need deserialization; covariances are optional but kept for completeness
     NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(
@@ -234,7 +238,7 @@ struct LidarFrame {
     uint64_t timebase;         // ns
     uint32_t point_num;
     uint8_t lidar_id;
-    std::vector<uint8_t> rsvd; // size 3 (uint8_t[3])
+    std::vector<uint8_t> rsvd = std::vector<uint8_t>(3,0); // size 3 (uint8_t[3])
 
     std::vector<LivoxPoint> points;
 
@@ -283,8 +287,8 @@ struct MeasureGroup     // Lidar data and imu dates for the curent process
         lidar_beg_time = 0.0;
         this->lidar.reset(new PointCloudXYZI());
     };
-    double lidar_beg_time;
-    double lidar_end_time;
+    double lidar_beg_time = 0.0;
+    double lidar_end_time = 0.0;
     PointCloudXYZI::Ptr lidar;
     std::deque<std::shared_ptr<IMU>> imu;
 };
@@ -321,45 +325,73 @@ struct Path {
         poses
     )
 };
+// ========== PointField ==========
+// 📌 移出常量定义到 namespace，避免每个实例带冗余数据
+namespace PointFieldConst {
+    constexpr uint8_t INT8    = 1;
+    constexpr uint8_t UINT8   = 2;
+    constexpr uint8_t INT16   = 3;
+    constexpr uint8_t UINT16  = 4;
+    constexpr uint8_t INT32   = 5;
+    constexpr uint8_t UINT32  = 6;
+    constexpr uint8_t FLOAT32 = 7;
+    constexpr uint8_t FLOAT64 = 8;
+}
 
 struct PointField {
-    uint8_t INT8    = 1;
-    uint8_t UINT8   = 2;
-    uint8_t INT16   = 3;
-    uint8_t UINT16  = 4;
-    uint8_t INT32   = 5;
-    uint8_t UINT32  = 6;
-    uint8_t FLOAT32 = 7;
-    uint8_t FLOAT64 = 8;
-    std::string name ;     // Name of field
-    uint32_t offset  ;  // Offset from start of point struct
-    uint8_t  datatype ; // Datatype enumeration, see above
-    uint32_t count  ;   // How many elements in the field
+    std::string name;       // Name of field
+    uint32_t offset = 0;    // Offset from start of point struct
+    uint8_t datatype = 0;   // See PointFieldConst::*
+    uint32_t count = 1;     // How many elements in the field
+
+    // Optional helper: check if datatype is float/double etc.
+    bool is_floating_point() const {
+        return datatype == PointFieldConst::FLOAT32 || datatype == PointFieldConst::FLOAT64;
+    }
+
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(
+        PointField,
+        name,
+        offset,
+        datatype,
+        count
+    )
 };
 
+// ========== PointCloud2 ==========
 struct PointCloud2 {
-// # The point cloud data may be organized 2d (image-like) or 1d
-// # (unordered). Point clouds organized as 2d images may be produced by
-// # camera depth sensors such as stereo or time-of-flight.
-//
-// # Time of sensor data acquisition, and the coordinate frame ID (for 3d
-// # points).
     Header header;
-
-    // # 2D structure of the point cloud. If the cloud is unordered, height is
-    // # 1 and width is the length of the point cloud.
-    uint32_t height;
-    uint32_t width;
-
-    // # Describes the channels and their layout in the binary data blob.
+    uint32_t height = 1;       // unordered → 1 row
+    uint32_t width = 0;        // number of points = height * width
     std::vector<PointField> fields;
+    bool is_bigendian = false;
+    uint32_t point_step = 0;   // bytes per point
+    uint32_t row_step = 0;     // bytes per row
+    std::vector<uint8_t> data; // raw point data, size = row_step * height
+    bool is_dense = true;      // true if no invalid (NaN/Inf) points
 
-    bool    is_bigendian ;// Is this data bigendian?
-    uint32_t  point_step;   // Length of a point in bytes
-    uint32_t  row_step;     // Length of a row in bytes
-    std::vector<uint8_t> data ;        // Actual point data, size is (row_step*height)
+    // Optional: compute total point count
+    size_t point_count() const { return static_cast<size_t>(height) * width; }
 
-    bool is_dense;        // True if there are no invalid points
+    // Optional: reserve data size (e.g., before filling)
+    void reserve_data_bytes(size_t bytes) { data.reserve(bytes); }
+
+    using Ptr = std::shared_ptr<PointCloud2>;
+    using ConstPtr = std::shared_ptr<const PointCloud2>;
+    using UniquePtr = std::unique_ptr<PointCloud2>;
+
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(
+        PointCloud2,
+        header,
+        height,
+        width,
+        fields,
+        is_bigendian,
+        point_step,
+        row_step,
+        data,
+        is_dense
+    )
 };
 
 struct PointCloudMsg {
@@ -380,6 +412,105 @@ struct Pose6D {
         0,0,0,
         0,0,0
     };      // the preintegrated rotation (global frame) at the Lidar origin
+};
+
+struct Image {
+    // === 核心字段（严格按 ROS sensor_msgs/Image 定义）===
+    Header header;
+    uint32_t height = 0;            // number of rows
+    uint32_t width = 0;             // number of columns
+    std::string encoding;           // e.g., "rgb8", "mono8", "bgr8"
+    uint8_t is_bigendian = 0;       // 0 = little-endian (x86/Jetson), 1 = big-endian (rare)
+    uint32_t step = 0;              // full row length in bytes (≥ width * channels * bytes_per_channel)
+    std::vector<uint8_t> data;      // raw pixel data, size = step * height
+
+    // === 辅助方法 ===
+    double timestamp() const { return header.stamp; }
+    const std::string& frame() const { return header.frame_id; }
+
+    // === 常用工具函数 ===
+    bool empty() const { return data.empty(); }
+    size_t size() const { return data.size(); }
+
+    // Check if data size matches expected (step * height)
+    bool validate() const {
+        return data.size() == static_cast<size_t>(step) * height;
+    }
+
+    // Get number of channels (heuristic, based on encoding)
+    int channels() const {
+        if (encoding == "mono8" || encoding == "mono16") return 1;
+        if (encoding == "rgb8" || encoding == "bgr8" ||
+            encoding == "rgba8" || encoding == "bgra8") {
+            return (encoding.find('a') != std::string::npos) ? 4 : 3;
+        }
+        if (encoding == "32FC1") return 1;
+        if (encoding == "32FC3") return 3;
+        // Add more as needed (see sensor_msgs/image_encodings.h)
+        return -1; // unknown
+    }
+
+    // Get bytes per pixel (heuristic)
+    int bytesPerPixel() const {
+        if (encoding.find("8") != std::string::npos) return 1;
+        if (encoding.find("16") != std::string::npos) return 2;
+        if (encoding.find("32FC") != std::string::npos) return 4;
+        return -1;
+    }
+
+    // === 智能指针别名（标准 ROS 风格）===
+    using Ptr = std::shared_ptr<Image>;
+    using ConstPtr = std::shared_ptr<const Image>;
+    using UniquePtr = std::unique_ptr<Image>;
+
+    // === JSON 序列化（nlohmann::json 兼容）===
+    // Only serialize header + metadata (skip large 'data' by default)
+    // To include data, use toJson(true)
+    nlohmann::json toJson(bool include_data = false) const {
+        nlohmann::json j;
+        j["header"] = header;
+        j["height"] = height;
+        j["width"] = width;
+        j["encoding"] = encoding;
+        j["is_bigendian"] = is_bigendian;
+        j["step"] = step;
+        if (include_data) {
+            // ⚠️ Warning: data can be huge! Only for debug/small images
+            j["data"] = data;  // nlohmann auto-converts vector<uint8_t>
+        } else {
+            j["data_size"] = data.size();
+        }
+        return j;
+    }
+
+    // Static from JSON (deserialization)
+    static Image fromJson(const nlohmann::json& j) {
+        Image img;
+        img.header = j.value("header", Header{});
+        img.height = j.value("height", 0u);
+        img.width = j.value("width", 0u);
+        img.encoding = j.value("encoding", "");
+        img.is_bigendian = j.value("is_bigendian", uint8_t(0));
+        img.step = j.value("step", 0u);
+
+        if (j.contains("data") && j["data"].is_array()) {
+            img.data = j["data"].get<std::vector<uint8_t>>();
+        }
+        // Note: data_size is ignored on load
+        return img;
+    }
+
+    // nlohmann macro for automatic from_json/to_json
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(
+        Image,
+        header,
+        height,
+        width,
+        encoding,
+        is_bigendian,
+        step
+        // ⚠️ Exclude 'data' from default serialization to avoid huge JSON
+    )
 };
 
 #endif //FASTLIO_QT_DATATYPES_H

@@ -4,13 +4,13 @@
 #pragma once
 
 
-#include "ImuProcess.h"
+#include "../../ImuProcess.h"
 #ifndef FASTLIO_QT_MAINWORKER_H
 #define FASTLIO_QT_MAINWORKER_H
 #include <QObject>
-#include "dataTypes.h"
+#include "../../Msgs/dataTypes.h"
 
-#include "ikd-Tree/ikd_Tree.h"
+#include "../../ikd-Tree/ikd_Tree.h"
 #include <mutex>
 #include <deque>
 #include <condition_variable>

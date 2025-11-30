@@ -3,7 +3,7 @@
 //
 
 #include "ImuProcess.h"
-#include "Exp_Math.h"
+#include "tools/Exp_Math.h"
 ImuProcess::ImuProcess()
     : b_first_frame_(true), imu_need_init_(true), start_timestamp_(-1)
 {

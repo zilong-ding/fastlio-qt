@@ -11,7 +11,7 @@
 // #include <pcl_conversions/pcl_conversions.h>
 
 #include <QThread>
-#include "dataTypes.h"
+#include "Msgs/dataTypes.h"
 using json = nlohmann::json;
 
 class messageReceiver:public QObject {

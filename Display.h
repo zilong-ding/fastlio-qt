@@ -9,9 +9,9 @@
 // #include "widget3d/EzQVTKOpenGLNativeWidget.h"
 #include <QVTKRenderWidget.h>
 #include <pcl/visualization/pcl_visualizer.h>
-#include "dataTypes.h"
+#include "Msgs/dataTypes.h"
 #include "messageReceiver.h"
-#include "MainWorker.h"
+#include "SLAM/FastLio/MainWorker.h"
 #include "QThread"
 #include <QUuid>
 #include <vtkGenericOpenGLRenderWindow.h>
