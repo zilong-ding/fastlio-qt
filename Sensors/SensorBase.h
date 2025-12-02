@@ -23,9 +23,11 @@ public:
 
     ~SensorBase() override = default;
 
-    void start(int intervalMs = 10) {
+    bool start(int intervalMs = 10) {
         timer->setInterval(intervalMs);
         timer->start();
+        std::cout << this->metaObject()->className() << " 开始运行！" << std::endl;
+        return true;
     }
 
     void stop() {

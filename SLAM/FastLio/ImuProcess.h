@@ -6,8 +6,8 @@
 #include <Eigen/Eigen>
 #include <iostream>
 #include <fstream>
-#include "IKFoM_toolkit/ikfomDataTypes.h"
-#include "Msgs/dataTypes.h"
+#include "../../IKFoM_toolkit/ikfomDataTypes.h"
+#include "../../Msgs/dataTypes.h"
 
 #ifndef FASTLIO_QT_IMUPROCESS_H
 #define FASTLIO_QT_IMUPROCESS_H

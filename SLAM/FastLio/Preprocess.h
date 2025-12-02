@@ -4,7 +4,7 @@
 
 #ifndef FASTLIO_QT_PREPROCESS_H
 #define FASTLIO_QT_PREPROCESS_H
-#include "Msgs/dataTypes.h"
+#include "../../Msgs/dataTypes.h"
 
 class Preprocess {
 public:
@@ -13,6 +13,7 @@ public:
     Preprocess();
     ~Preprocess() = default;
     void process(std::shared_ptr<LidarFrame> &msg, PointCloudXYZI::Ptr &pcl_out);
+    void process(PointCloud2::Ptr &msg, PointCloudXYZI::Ptr &pcl_out);
     void set(bool feat_en, int lid_type, double bld, int pfilt_num);
     double blind;
     int N_SCANS;
@@ -21,6 +22,7 @@ public:
     bool feature_enabled, given_offset_time;
 private:
     void avia_handler(std::shared_ptr<LidarFrame> &msg);
+    void avia_handler(std::shared_ptr<PointCloud2> &msg);
     void give_feature(PointCloudXYZI &pl, std::vector<orgtype> &types);
     int  plane_judge(const PointCloudXYZI &pl, std::vector<orgtype> &types,
                         uint i, uint &i_nex, Eigen::Vector3d &curr_direct);

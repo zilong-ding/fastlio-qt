@@ -45,6 +45,178 @@ void Preprocess::process(std::shared_ptr<LidarFrame> &msg, PointCloudXYZI::Ptr &
   *pcl_out = pl_surf;
 }
 
+void Preprocess::process(PointCloud2::Ptr &msg, PointCloudXYZI::Ptr &pcl_out) {
+  avia_handler(msg);
+  *pcl_out = pl_surf;
+}
+
+void Preprocess::avia_handler(std::shared_ptr<PointCloud2> &msg)
+{
+    pl_surf.clear();
+    pl_corn.clear();
+    pl_full.clear();
+
+    // 1. PointCloud2 → PCL
+    PointCloudXYZI::Ptr pl_orig = std::make_shared<PointCloudXYZI>();
+    if (!Pointcloud2ToPCL(msg, pl_orig))
+        return;
+
+    int plsize = pl_orig->size();
+    if (plsize == 0) return;
+
+    pl_full.resize(plsize);
+    pl_corn.reserve(plsize);
+    pl_surf.reserve(plsize);
+
+    // -----------------------------
+    // feature_enabled = true 分支
+    // -----------------------------
+    if (feature_enabled)
+    {
+        // 清空每条 scan 的缓存
+        for (int i = 0; i < N_SCANS; i++)
+        {
+            pl_buff[i].clear();
+            pl_buff[i].reserve(plsize);
+        }
+
+        // -------- 第一轮：构建 pl_full & pl_buff ----------
+        for (uint i = 1; i < plsize; i++)
+        {
+            const auto& p = pl_orig->points[i];
+
+            // --- blind filter ---
+            double range2 = p.x*p.x + p.y*p.y + p.z*p.z;
+            if (range2 < blind * blind)
+                continue;
+
+            // --------- line & tag 过滤逻辑（与 LivoxFrame 完全一致） --------
+            // PointCloud2 不带 line / tag，需要从 reflectivity or ring 额外传输
+            // 通常使用 PointField "line" "tag"，和 LivoxPoint 对齐
+            int line = 0;
+            int tag  = 0;
+
+            // 获取 line / tag （前面你定义的 PointCloud2 → LidarFrame 就支持）
+            {
+                uint8_t val_line = 0, val_tag = 0;
+                // 建议你提前把 line/tag 在 PCL intensity 后面扩展写入 curvature 或 normal_x
+                // 这里假设 curvature=offset_time, normal_x=line, normal_y=tag
+                line = static_cast<int>(p.normal_x);
+                tag  = static_cast<int>(p.normal_y);
+            }
+
+            if (line >= N_SCANS) continue;
+            if (!((tag & 0x30) == 0x10 || (tag & 0x30) == 0x00))
+                continue;
+
+            // ---------- 填充 pl_full[i] ----------
+            pl_full[i].x = p.x;
+            pl_full[i].y = p.y;
+            pl_full[i].z = p.z;
+            pl_full[i].intensity = p.intensity;
+
+            // curvature = offset_time (ms)
+            pl_full[i].curvature = p.curvature / float(1000000);
+
+            // ---------- 重复点剔除 ----------
+            const auto& q = pl_orig->points[i-1];
+            if ((fabs(p.x - q.x) > 1e-7) ||
+                (fabs(p.y - q.y) > 1e-7) ||
+                (fabs(p.z - q.z) > 1e-7))
+            {
+                pl_buff[line].push_back(pl_full[i]);
+            }
+        }
+
+        // -------- 第二轮：逐线提取特征 give_feature() ----------
+        static int count = 0;
+        static double total_time = 0;
+
+        double t0 = omp_get_wtime();
+
+        for (int j = 0; j < N_SCANS; j++)
+        {
+            pcl::PointCloud<PointType> &pl = pl_buff[j];
+            if (pl.size() <= 5) continue;
+
+            uint32_t sz = pl.size();
+            std::vector<orgtype> &types = typess[j];
+            types.clear();
+            types.resize(sz);
+
+            // 计算点间距离
+            for (uint i = 0; i + 1 < sz; i++)
+            {
+                types[i].range =
+                    sqrt(pl[i].x*pl[i].x + pl[i].y*pl[i].y);
+
+                float vx = pl[i].x - pl[i+1].x;
+                float vy = pl[i].y - pl[i+1].y;
+                float vz = pl[i].z - pl[i+1].z;
+                types[i].dista = sqrt(vx*vx + vy*vy + vz*vz);
+            }
+
+            types[sz - 1].range =
+                sqrt(pl[sz-1].x * pl[sz-1].x + pl[sz-1].y * pl[sz-1].y);
+
+            // Fast-LIO 原始特征提取函数
+            give_feature(pl, types);
+        }
+
+        total_time += (omp_get_wtime() - t0);
+        count++;
+        printf("Feature extraction time: %lf ms \n", total_time / count * 1000.0);
+    }
+
+    // -----------------------------
+    // feature_enabled = false 分支
+    // -----------------------------
+    else
+    {
+        uint valid_num = 0;
+
+        for (uint i = 1; i < plsize; i++)
+        {
+            const auto& p = pl_orig->points[i];
+
+            // --- line & tag 过滤 ---
+            int line = static_cast<int>(p.normal_x);
+            int tag  = static_cast<int>(p.normal_y);
+            if (line >= N_SCANS) continue;
+            if (!((tag & 0x30) == 0x10 || (tag & 0x30) == 0x00))
+                continue;
+
+            // 降采样
+            valid_num++;
+            if (valid_num % point_filter_num != 0)
+                continue;
+
+            // blind
+            float range2 = p.x*p.x + p.y*p.y + p.z*p.z;
+            if (range2 < blind * blind)
+                continue;
+
+            PointType q;
+            q.x = p.x;
+            q.y = p.y;
+            q.z = p.z;
+            q.intensity = p.intensity;
+            q.curvature = p.curvature / float(1000000);
+
+            // 去除重复点（效果更好）
+            const auto& last = pl_orig->points[i - 1];
+            if ((fabs(p.x - last.x) > 1e-7) ||
+                (fabs(p.y - last.y) > 1e-7) ||
+                (fabs(p.z - last.z) > 1e-7))
+            {
+                pl_surf.push_back(q);
+            }
+        }
+    }
+}
+
+
+
 void Preprocess::avia_handler(std::shared_ptr<LidarFrame> &msg)
 {
   pl_surf.clear();

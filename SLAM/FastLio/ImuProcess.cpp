@@ -3,7 +3,7 @@
 //
 
 #include "ImuProcess.h"
-#include "tools/Exp_Math.h"
+#include "../../tools/Exp_Math.h"
 ImuProcess::ImuProcess()
     : b_first_frame_(true), imu_need_init_(true), start_timestamp_(-1)
 {
@@ -222,7 +222,7 @@ void ImuProcess::UndistortPcl(const MeasureGroup &meas, esekfom::esekf<state_ikf
   last_lidar_end_time_ = pcl_end_time;
 
   /*** undistort each lidar point (backward propagation) ***/
-    std::cout << (pcl_out.points.begin() == pcl_out.points.end()) << std::endl;
+    // std::cout << (pcl_out.points.begin() == pcl_out.points.end()) << std::endl;
   if (pcl_out.points.begin() == pcl_out.points.end()) return;
 
   if(lidar_type != MARSIM){
@@ -238,7 +238,7 @@ void ImuProcess::UndistortPcl(const MeasureGroup &meas, esekfom::esekf<state_ikf
           acc_imu<<VEC_FROM_ARRAY(tail->acc);
           angvel_avr<<VEC_FROM_ARRAY(tail->gyr);
 
-          for(; it_pcl->curvature / double(1000) > head->offset_time; it_pcl --)
+          for(; it_pcl->curvature / double(1000) > head->offset_time; --it_pcl)
           {
               dt = it_pcl->curvature / double(1000) - head->offset_time;
 

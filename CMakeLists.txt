@@ -83,10 +83,10 @@ add_executable(fastlio_qt main.cpp
         messageReceiver.h
         SLAM/FastLio/MainWorker.cpp
         SLAM/FastLio/MainWorker.h
-        Preprocess.cpp
-        Preprocess.h
-        ImuProcess.cpp
-        ImuProcess.h
+        SLAM/FastLio/Preprocess.cpp
+        SLAM/FastLio/Preprocess.h
+        SLAM/FastLio/ImuProcess.cpp
+        SLAM/FastLio/ImuProcess.h
         IKFoM_toolkit/ikfomDataTypes.h
         ikd-Tree/ikd_Tree.cpp
         ikd-Tree/ikd_Tree.h
@@ -99,12 +99,15 @@ add_executable(fastlio_qt main.cpp
 #        widget3d/EzQVTKRenderWindowAdapter.cxx widget3d/EzQVTKRenderWindowAdapter.h
 #        widget3d/EzQVTKInteractorInternal.h
         mainwindow.ui
-        SLAM/LioBase.cpp
-        SLAM/LioBase.h
+        SLAM/SLAMBase.cpp
+        SLAM/SLAMBase.h
         Sensors/SensorType.h
         tools/utills.h
         Sensors/SensorBase.h
         SLAM/AlgorithmMainBase.h
+        SLAM/FastLio/FastLioMain.cpp
+        SLAM/FastLio/FastLioMain.h
+        SLAM/FastLio/FastlioConfig.h
 
 
 )

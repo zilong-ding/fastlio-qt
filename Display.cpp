@@ -44,6 +44,7 @@ Displayer::Displayer(QWidget *parent)
     viewer  = std::make_shared<pcl::visualization::PCLVisualizer>(renderer, renderWindow, "viewer", false);
     vtkWidget->setRenderWindow(viewer->getRenderWindow().Get());
     viewer->setupInteractor(vtkWidget->interactor(), vtkWidget->renderWindow());
+    renderWindow->Render();
     vtkWidget->update();
     viewer->addCoordinateSystem(10,"world");
     lastPoint = pcl::PointXYZ(0.0,0.0,0.0);

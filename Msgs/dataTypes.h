@@ -4,8 +4,8 @@
 
 #ifndef FASTLIO_QT_DATATYPES_H
 #define FASTLIO_QT_DATATYPES_H
-
-
+// #include <pcl_>
+// #include <pcl/conversions.h>
 #include <nlohmann/json.hpp>
 #include <cstdint>
 #include <string>
@@ -241,6 +241,10 @@ struct LidarFrame {
     std::vector<uint8_t> rsvd = std::vector<uint8_t>(3,0); // size 3 (uint8_t[3])
 
     std::vector<LivoxPoint> points;
+    // === 智能指针别名（标准 ROS 风格）===
+    using Ptr = std::shared_ptr<LidarFrame>;
+    using ConstPtr = std::shared_ptr<const LidarFrame>;
+    using UniquePtr = std::unique_ptr<LidarFrame>;
 
     // Derived properties (computed on demand)
     double scan_duration() const {
@@ -512,5 +516,221 @@ struct Image {
         // ⚠️ Exclude 'data' from default serialization to avoid huge JSON
     )
 };
+
+inline void LidarFrame2Pointcloud2(LidarFrame::Ptr& lidar_frame, PointCloud2::Ptr& pointcloud2)
+{
+    if (!pointcloud2) {
+        pointcloud2 = std::make_shared<PointCloud2>();
+    }
+
+    // 空检查
+    if (lidar_frame->points.empty()) {
+        pointcloud2->width = 0;
+        pointcloud2->row_step = 0;
+        pointcloud2->data.clear();
+        return;
+    }
+
+    // ------------ 1. 填写 header ------------
+    pointcloud2->header = lidar_frame->header;
+
+    // ------------ 2. 组织 pointcloud2 基本信息 ------------
+    const size_t N = lidar_frame->points.size();
+    pointcloud2->height = 1;
+    pointcloud2->width = N;
+    pointcloud2->is_dense = true;
+    pointcloud2->is_bigendian = false;
+
+    // 每个点大小 = LivoxPoint 实际字节大小
+    const uint32_t POINT_SIZE = sizeof(LivoxPoint);   // 19 bytes
+    pointcloud2->point_step = POINT_SIZE;
+    pointcloud2->row_step = POINT_SIZE * N;
+
+    // ------------ 3. 设置 fields ------------
+    using PF = PointField;
+    pointcloud2->fields.clear();
+
+    pointcloud2->fields = {
+        PF{"offset_time",  offsetof(LivoxPoint, offset_time), PointFieldConst::UINT32, 1},
+        PF{"x",            offsetof(LivoxPoint, x),           PointFieldConst::FLOAT32, 1},
+        PF{"y",            offsetof(LivoxPoint, y),           PointFieldConst::FLOAT32, 1},
+        PF{"z",            offsetof(LivoxPoint, z),           PointFieldConst::FLOAT32, 1},
+        PF{"reflectivity", offsetof(LivoxPoint, reflectivity),PointFieldConst::UINT8, 1},
+        PF{"tag",          offsetof(LivoxPoint, tag),         PointFieldConst::UINT8, 1},
+        PF{"line",         offsetof(LivoxPoint, line),        PointFieldConst::UINT8, 1},
+    };
+
+    // ------------ 4. 拷贝原始二进制点数据 ------------
+    pointcloud2->data.resize(pointcloud2->row_step);
+
+    // 直接按字节 memcpy，最高效，也确保字段正确对齐
+    std::memcpy(pointcloud2->data.data(),
+                lidar_frame->points.data(),
+                pointcloud2->row_step);
+}
+
+inline bool Pointcloud2ToLidarFrame(const PointCloud2::ConstPtr& cloud, LidarFrame::Ptr& lidar_frame)
+{
+    if (!cloud || cloud->width == 0 || cloud->data.empty()) {
+        return false;
+    }
+
+    // ---------------- 1. 填充 Header ----------------
+    lidar_frame->header = cloud->header;
+
+    // LidarFrame 里的时间基准（ns）仍由外部决定
+    // 如果 PointCloud2 想要内置 timebase，可扩展 Header
+    lidar_frame->timebase = 0;
+
+    // ---------------- 2. 检查字段是否完整 ----------------
+    // 需要的字段名称
+    static const std::vector<std::string> required_fields = {
+        "offset_time", "x", "y", "z", "reflectivity", "tag", "line"
+    };
+
+    // 查找 fields
+    std::unordered_map<std::string, const PointField*> field_map;
+    for (const auto& f : cloud->fields) {
+        field_map[f.name] = &f;
+    }
+
+    // 确认字段齐全
+    for (const auto& name : required_fields) {
+        if (field_map.find(name) == field_map.end()) {
+            std::cerr << "Missing PointField: " << name << std::endl;
+            return false;
+        }
+    }
+
+    // ---------------- 3. 准备输出点数组 ----------------
+    const size_t N = cloud->width * cloud->height;
+    lidar_frame->points.resize(N);
+    lidar_frame->point_num = N;
+    lidar_frame->lidar_id = 0;  // 可根据需要填写
+    lidar_frame->rsvd = {0, 0, 0};
+
+    const uint8_t* data_ptr = cloud->data.data();
+    const uint32_t step = cloud->point_step;
+
+    // ---------------- 4. 遍历每个点，逐字段复制 ----------------
+    for (size_t i = 0; i < N; ++i)
+    {
+        const uint8_t* p = data_ptr + i * step;
+        LivoxPoint& dst = lidar_frame->points[i];
+
+        // 必须使用 memcpy，因为 PointCloud2 不保证结构体对齐
+        memcpy(&dst.offset_time, p + field_map["offset_time"]->offset, sizeof(uint32_t));
+        memcpy(&dst.x,           p + field_map["x"]->offset,           sizeof(float));
+        memcpy(&dst.y,           p + field_map["y"]->offset,           sizeof(float));
+        memcpy(&dst.z,           p + field_map["z"]->offset,           sizeof(float));
+        memcpy(&dst.reflectivity,p + field_map["reflectivity"]->offset,sizeof(uint8_t));
+        memcpy(&dst.tag,         p + field_map["tag"]->offset,         sizeof(uint8_t));
+        memcpy(&dst.line,        p + field_map["line"]->offset,        sizeof(uint8_t));
+    }
+
+    return true;
+}
+
+inline bool Pointcloud2ToPCL(const PointCloud2::ConstPtr& cloud, PointCloudXYZI::Ptr& pcl_cloud)
+{
+    if (!cloud || cloud->width == 0 || cloud->data.empty()) {
+        return false;
+    }
+
+    if (!pcl_cloud) {
+        pcl_cloud = std::make_shared<PointCloudXYZI>();
+    }
+
+    pcl_cloud->clear();
+    pcl_cloud->header.frame_id = cloud->header.frame_id;
+    pcl_cloud->height = 1;
+    pcl_cloud->width = cloud->width * cloud->height;
+    pcl_cloud->is_dense = cloud->is_dense;
+    pcl_cloud->points.resize(pcl_cloud->width);
+
+    // ---------------- 1. 查找 PointField 的 offset ----------------
+    const PointField* f_x = nullptr;
+    const PointField* f_y = nullptr;
+    const PointField* f_z = nullptr;
+    const PointField* f_reflect = nullptr;
+    const PointField* f_offset_time = nullptr;
+    const PointField* f_tag = nullptr;
+    const PointField* f_line = nullptr;
+
+    for (const auto& f : cloud->fields) {
+        if (f.name == "x") f_x = &f;
+        else if (f.name == "y") f_y = &f;
+        else if (f.name == "z") f_z = &f;
+        else if (f.name == "reflectivity") f_reflect = &f;
+        else if (f.name == "offset_time") f_offset_time = &f;
+        else if (f.name == "tag") f_tag = &f;
+        else if (f.name == "line") f_line = &f;
+        else {
+            std::cerr << "Warning: Unknown point field: " << f.name << std::endl;
+        }
+    }
+
+    if (!f_x || !f_y || !f_z || !f_reflect || !f_offset_time || !f_tag || !f_line) {
+        std::cerr << "Error: Missing required point fields\n";
+        return false;
+    }
+
+    // ---------------- 2. 读取点数据 ----------------
+    const uint8_t* data_ptr = cloud->data.data();
+    const uint32_t step = cloud->point_step;
+    const size_t N = pcl_cloud->points.size();
+
+    for (size_t i = 0; i < N; ++i)
+    {
+        const uint8_t* p = data_ptr + i * step;
+        PointType& dst = pcl_cloud->points[i];
+
+        // x,y,z
+        memcpy(&dst.x, p + f_x->offset, sizeof(float));
+        memcpy(&dst.y, p + f_y->offset, sizeof(float));
+        memcpy(&dst.z, p + f_z->offset, sizeof(float));
+
+        // reflectivity → intensity
+        uint8_t reflectivity_uint8;
+        memcpy(&reflectivity_uint8, p + f_reflect->offset, sizeof(uint8_t));
+        dst.intensity = static_cast<float>(reflectivity_uint8);
+
+        // offset_time-> curvature
+        if (f_offset_time != nullptr) {
+            uint32_t offset_time;
+            memcpy(&offset_time, p + f_offset_time->offset, sizeof(uint32_t));
+            dst.curvature = static_cast<float>(offset_time) / float(1000000); // ns -> ms
+        }
+        else {
+            dst.curvature = 0.0f;
+        }
+
+        // tag, line
+        if (f_tag) {
+            uint16_t tag_id;
+            memcpy(&tag_id, p + f_tag->offset, sizeof(uint8_t));
+            dst.normal_y = static_cast<float>(tag_id);
+        } else {
+            dst.normal_y = 0.f;
+        }
+        if (f_line) {
+            uint16_t line_id;
+            memcpy(&line_id, p + f_line->offset, sizeof(uint8_t));
+            dst.normal_x = static_cast<float>(line_id);
+        } else {
+            dst.normal_x = 0.f;
+        }
+
+
+        // PCL 的 normal 全部置 0
+        // dst.normal_x = 0.0f;
+        // dst.normal_y = 0.0f;
+        dst.normal_z = 0.0f;
+
+    }
+
+    return true;
+}
+
 
 #endif //FASTLIO_QT_DATATYPES_H

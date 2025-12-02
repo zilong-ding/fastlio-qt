@@ -12,13 +12,14 @@
 #include <mutex>
 #include <deque>
 #include <condition_variable>
+#include "../Sensors/SensorType.h"
 // #include <shared_ptr>
-struct IMU;
-struct PointCloud2;
-// struct MeasureGroup;
-struct Path;
-struct Odometry;
-struct PointCloudMsg;
+// struct IMU;
+// struct PointCloud2;
+// // struct MeasureGroup;
+// struct Path;
+// struct Odometry;
+// struct PointCloudMsg;
 
 class AlgorithmMainBase : public QObject {
     Q_OBJECT
@@ -41,12 +42,24 @@ public:
         lidar_buffer.clear();
         time_buffer.clear();
     }
+    bool start(int intervalMs = 10) {
+        timer->start(intervalMs);
+        std::cout << this->metaObject()->className() << " 开始运行！" << std::endl;
+        return true;
+    }
 
 
 
 public slots:
-    virtual void imuCallback(std::shared_ptr<IMU> msg_in) = 0;
-    virtual void lidarCallback(std::shared_ptr<PointCloud2> msg) = 0;
+    virtual void imuCallback(IMU::Ptr msg_in) {
+        std::cout << "也许你忘记重载 imuCallback 函数了！" << std::endl;
+    };
+    virtual void lidarCallback(PointCloud2::Ptr msg) {
+        std::cout << "也许你忘记重载 lidarCallback 函数了！" << std::endl;
+    };
+    virtual void imageCallback(Image::Ptr msg) {
+        std::cout << "也许你忘记重载 imageCallback 函数了！" << std::endl;
+    };
     virtual void loop() = 0;
 
     void setStop() {
@@ -61,9 +74,10 @@ protected:
 
     // 缓冲区：IMU + Lidar
     std::mutex mtx_buffer;
-    std::deque<std::shared_ptr<IMU>> imu_buffer;
+    std::deque<IMU::Ptr> imu_buffer;
     // 🔥 恢复并加入 lidar_buffer
-    std::deque<std::shared_ptr<LidarFrame>> lidar_buffer;
+    std::deque<PointCloudXYZI::Ptr> lidar_buffer;
+    std::deque<Image::Ptr> image_buffer;
 
     // 时间缓存（用于 sync）
     std::deque<double> time_buffer;
@@ -72,11 +86,12 @@ protected:
 
     double last_timestamp_lidar;
     double last_timestamp_imu;
+    double last_timestamp_image;
 
     Odometry odomAftMapped;
     Path path;
 
-    signals:
+signals:
     void publishOdom(Odometry odom);
     void PathPublish(Path p);
     void PointCloudPublish(PointCloudMsg p);
