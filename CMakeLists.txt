@@ -105,8 +105,8 @@ add_executable(fastlio_qt main.cpp
         tools/utills.h
         Sensors/SensorBase.h
         SLAM/AlgorithmMainBase.h
-        SLAM/FastLio/FastLioMain.cpp
-        SLAM/FastLio/FastLioMain.h
+#        SLAM/FastLio/FastLioMain.cpp
+#        SLAM/FastLio/FastLioMain.h
         SLAM/FastLio/FastlioConfig.h
 
 
@@ -133,3 +133,35 @@ vtk_module_autoinit(
 
 #find_package(g2o CONFIG REQUIRED)
 #target_link_libraries(main PRIVATE g2o::core g2o::stuff g2o::types_icp g2o::types_sba)
+
+add_executable(fastlio_example
+        examples/fastlio_example.cpp
+        SLAM/FastLio/Preprocess.cpp
+        SLAM/FastLio/Preprocess.h
+        SLAM/FastLio/ImuProcess.cpp
+        SLAM/FastLio/ImuProcess.h
+        IKFoM_toolkit/ikfomDataTypes.h
+        ikd-Tree/ikd_Tree.cpp
+        ikd-Tree/ikd_Tree.h
+        tools/Exp_Math.h
+        SLAM/SLAMBase.cpp
+        SLAM/SLAMBase.h
+        Sensors/SensorType.h
+        tools/utills.h
+        Sensors/SensorBase.h
+        SLAM/AlgorithmMainBase.h
+        SLAM/FastLio/FastLioMain.cpp
+        SLAM/FastLio/FastLioMain.h
+        SLAM/FastLio/FastlioConfig.h
+
+)
+target_link_libraries(fastlio_example PRIVATE libzmq libzmq-static)
+target_link_libraries(fastlio_example PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(fastlio_example PRIVATE Qt::Core Qt::Widgets)
+target_link_libraries(fastlio_example PRIVATE ${PCL_LIBRARIES} ${VTK_LIBRARIES})
+
+# vtk_module_autoinit is needed
+vtk_module_autoinit(
+        TARGETS fastlio_example
+        MODULES ${VTK_LIBRARIES}
+)

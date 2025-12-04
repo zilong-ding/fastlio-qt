@@ -41,7 +41,7 @@ std::optional<MainWorkerConfig> loadConfigFromJson(const std::string& filepath) 
         return std::nullopt;
     }
 }
-
+FastLioMain* FastLioMain::instance = nullptr;
 FastLioMain::FastLioMain(QObject *parent) {
     instance = this;
     p_pre = std::make_shared<Preprocess>();
@@ -113,6 +113,184 @@ void FastLioMain::lidarCallback(PointCloud2::Ptr msg) {
     // s_plot11[scan_count] = omp_get_wtime() - preprocess_start_time;
     mtx_buffer.unlock();
     sig_buffer.notify_all();
+}
+
+bool FastLioMain::sync_packages(MeasureGroup &meas) {
+    // std::cout << "sync_packages" << std::endl;
+    std::lock_guard<std::mutex> lock(mtx_buffer);
+    if (lidar_buffer.empty() || imu_buffer.empty()) {
+        return false;
+    }
+
+    /*** push a lidar scan ***/
+    if(!lidar_pushed)
+    {
+        meas.lidar = lidar_buffer.front();
+        meas.lidar_beg_time = time_buffer.front();
+
+
+        if (meas.lidar->points.size() <= 1) // time too little
+        {
+            lidar_end_time = meas.lidar_beg_time + lidar_mean_scantime;
+            std::cout << "Too few input point cloud!" << std::endl;
+        }
+        else if (meas.lidar->points.back().curvature / double(1000) < 0.5 * lidar_mean_scantime)
+        {
+            lidar_end_time = meas.lidar_beg_time + lidar_mean_scantime;
+        }
+        else
+        {
+            scan_num ++;
+            lidar_end_time = meas.lidar_beg_time + meas.lidar->points.back().curvature / double(1000);
+            lidar_mean_scantime += (meas.lidar->points.back().curvature / double(1000) - lidar_mean_scantime) / scan_num;
+        }
+        if(lidar_type == MARSIM)
+            lidar_end_time = meas.lidar_beg_time;
+
+        meas.lidar_end_time = lidar_end_time;
+
+        lidar_pushed = true;
+    }
+
+    if (last_timestamp_imu < lidar_end_time)
+    {
+        return false;
+    }
+
+    /*** push imu data, and pop from imu buffer ***/
+    double imu_time = imu_buffer.front()->header.stamp;
+    meas.imu.clear();
+    while ((!imu_buffer.empty()) && (imu_time < lidar_end_time))
+    {
+        imu_time = imu_buffer.front()->header.stamp;
+        if(imu_time > lidar_end_time) break;
+        meas.imu.push_back(imu_buffer.front());
+        imu_buffer.pop_front();
+    }
+
+    lidar_buffer.pop_front();
+    time_buffer.pop_front();
+    lidar_pushed = false;
+    return true;
+}
+
+void FastLioMain::loop()
+{
+
+    bool status = !stop;
+
+    if (flg_exit) return;
+    if(sync_packages(Measures))
+    {
+
+        if (flg_first_scan)
+        {
+            first_lidar_time = Measures.lidar_beg_time;
+            p_imu->first_lidar_time = first_lidar_time;
+            flg_first_scan = false;
+            return;
+        }
+
+        double t0,t1,t2,t3,t4,t5,match_start, solve_start, svd_time;
+
+        match_time = 0;
+        kdtree_search_time = 0.0;
+        solve_time = 0;
+        solve_const_H_time = 0;
+        svd_time   = 0;
+        t0 = omp_get_wtime();
+
+        p_imu->Process(Measures, kf, feats_undistort);
+        state_point = kf.get_x();
+        pos_lid = state_point.pos + state_point.rot * state_point.offset_T_L_I;
+
+        if (feats_undistort->empty() || (feats_undistort == NULL))
+        {
+            std::cout<<"feats_undistort is null, skip this scan!"<<std::endl;
+            return;
+        }
+
+
+        flg_EKF_inited = (Measures.lidar_beg_time - first_lidar_time) < INIT_TIME ? false : true;
+        /*** Segment the map in lidar FOV ***/
+        lasermap_fov_segment();
+
+        /*** downsample the feature points in a scan ***/
+        downSizeFilterSurf.setInputCloud(feats_undistort);
+        downSizeFilterSurf.filter(*feats_down_body);
+        t1 = omp_get_wtime();
+        feats_down_size = feats_down_body->points.size();
+        /*** initialize the map kdtree ***/
+        if(ikdtree.Root_Node == nullptr)
+        {
+            if(feats_down_size > 5)
+            {
+                ikdtree.set_downsample_param(filter_size_map_min);
+                feats_down_world->resize(feats_down_size);
+                for(int i = 0; i < feats_down_size; i++)
+                {
+                    pointBodyToWorld(&(feats_down_body->points[i]), &(feats_down_world->points[i]));
+                }
+                ikdtree.Build(feats_down_world->points);
+            }
+            return;
+        }
+        // std::cout << "sync_packages" << std::endl;
+        int featsFromMapNum = ikdtree.validnum();
+        kdtree_size_st = ikdtree.size();
+
+        // cout<<"[ mapping ]: In num: "<<feats_undistort->points.size()<<" downsamp "<<feats_down_size<<" Map num: "<<featsFromMapNum<<"effect num:"<<effct_feat_num<<endl;
+
+        /*** ICP and iterated Kalman filter update ***/
+        if (feats_down_size < 5)
+        {
+            // ROS_WARN("No point, skip this scan!\n");
+            std::cout<<"No point, skip this scan!"<<std::endl;
+            return;
+        }
+
+        normvec->resize(feats_down_size);
+        feats_down_world->resize(feats_down_size);
+
+        V3D ext_euler = SO3ToEuler(state_point.offset_R_L_I);
+
+        // pointSearchInd_surf.resize(feats_down_size);
+        Nearest_Points.resize(feats_down_size);
+        int  rematch_num = 0;
+        bool nearest_search_en = true; //
+
+        t2 = omp_get_wtime();
+
+        /*** iterated state estimation ***/
+        double t_update_start = omp_get_wtime();
+        double solve_H_time = 0;
+        kf.update_iterated_dyn_share_modified(LASER_POINT_COV, solve_H_time);
+        state_point = kf.get_x();
+        // euler_cur = SO3ToEuler(state_point.rot);
+        pos_lid = state_point.pos + state_point.rot * state_point.offset_T_L_I;
+        geoQuat.x = state_point.rot.coeffs()[0];
+        geoQuat.y = state_point.rot.coeffs()[1];
+        geoQuat.z = state_point.rot.coeffs()[2];
+        geoQuat.w = state_point.rot.coeffs()[3];
+
+        double t_update_end = omp_get_wtime();
+
+        /******* Publish odometry *******/
+        publish_odometry();
+
+        /*** add the feature points to map kdtree ***/
+        t3 = omp_get_wtime();
+        map_incremental();
+        t5 = omp_get_wtime();
+
+        /******* Publish points *******/
+        if (path_en)                         publish_path();
+        if (scan_pub_en || pcd_save_en)      publish_frame_world();
+
+    }
+
+    status = !stop;
+
 }
 
 void FastLioMain::initParams(const MainWorkerConfig& config)

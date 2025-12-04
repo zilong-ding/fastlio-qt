@@ -22,12 +22,17 @@ public:
      * @param parent 父对象指针，默认为nullptr
      */
     explicit ImuBase(QObject* parent = nullptr) : SensorBase(parent) {
+        std::cout << "ImuBase created" << std::endl;
     }
 
     /**
      * @brief 虚析构函数
      */
     ~ImuBase() override = default;
+
+    void loop() override{
+        std::cerr << "您必须重载ImuBase::loop函数来获取数据！" << std::endl;
+    }
 
 public slots:
     /**
@@ -36,9 +41,7 @@ public slots:
      * 此函数提供了默认实现，会输出提示信息要求用户重载此函数。
      * 实际使用中应被派生类重写以实现具体的IMU数据采集逻辑。
      */
-    virtual void loop() override{
-        std::cerr << "您必须重载ImuBase::loop函数来获取数据！" << std::endl;
-    }
+
 
 signals:
     /**
@@ -63,14 +66,13 @@ public:
      * @param parent 父对象指针，默认为nullptr
      */
     explicit LidarBase(QObject* parent = nullptr) : SensorBase(parent) {
+        std::cout << "LidarBase created" << std::endl;
     }
 
     /**
      * @brief 虚析构函数
      */
     ~LidarBase() override = default;
-
-public slots:
     /**
      * @brief 循环处理函数，用于获取传感器数据
      *
@@ -80,6 +82,9 @@ public slots:
     void loop() override {
         std::cerr << "您必须重载LidarBase::loop函数来获取数据！" << std::endl;
     }
+
+public slots:
+
 
 signals:
     /**
@@ -103,6 +108,7 @@ public:
      * @param parent 父对象指针，默认为nullptr
      */
     explicit CameraBase(QObject* parent = nullptr) : SensorBase(parent) {
+        std::cout << "CameraBase created" << std::endl;
     }
 
     /**

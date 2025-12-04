@@ -21,7 +21,9 @@ class FastLioMain : public AlgorithmMainBase{
     Q_OBJECT
 public:
     explicit FastLioMain(QObject *parent = nullptr);
-    ~FastLioMain() override;
+    ~FastLioMain() override {
+
+    };
 
     void initParams(const MainWorkerConfig& config) ;
     bool sync_packages(MeasureGroup &meas);

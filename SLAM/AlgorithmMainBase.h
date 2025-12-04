@@ -31,7 +31,8 @@ public:
           last_timestamp_imu(-1.0),
           stop(false)
     {
-        connect(timer, &QTimer::timeout, this, &AlgorithmMainBase::loop);
+        connect(timer, &QTimer::timeout, this, &AlgorithmMainBase::onTimeout);
+        std::cout << "AlgorithmMainBase 构造函数" << std::endl;
     }
 
     ~AlgorithmMainBase() override {
@@ -47,6 +48,7 @@ public:
         std::cout << this->metaObject()->className() << " 开始运行！" << std::endl;
         return true;
     }
+    virtual void loop() = 0;
 
 
 
@@ -60,12 +62,16 @@ public slots:
     virtual void imageCallback(Image::Ptr msg) {
         std::cout << "也许你忘记重载 imageCallback 函数了！" << std::endl;
     };
-    virtual void loop() = 0;
+
 
     void setStop() {
         stop = true;
         if (timer) timer->stop();
         sig_buffer.notify_all();
+    }
+    void onTimeout() {
+        // std::cout << this->metaObject()->className() << " 运行中..." << std::endl;
+        loop();  // ✅ 运行时调用子类实现，无纯虚函数取址风险
     }
 
 protected:

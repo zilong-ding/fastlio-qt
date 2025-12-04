@@ -8,7 +8,8 @@
 #include <QObject>
 #include <QTimer>
 #include "../Msgs/dataTypes.h"
-
+#include <QDebug>
+#include <QThread>
 // template <typename T>
 class SensorBase : public QObject {
     Q_OBJECT
@@ -18,29 +19,38 @@ public:
         : QObject(parent)
         , timer(new QTimer(this))
     {
-        connect(timer, &QTimer::timeout, this, &SensorBase::loop);
+        auto res = connect(timer, &QTimer::timeout, this, &SensorBase::onTimeout);
+        std::cout << "SensorBase::SensorBase"  << " 创建成功: " <<  res << std::endl;
     }
 
     ~SensorBase() override = default;
 
-    bool start(int intervalMs = 10) {
-        timer->setInterval(intervalMs);
-        timer->start();
-        std::cout << this->metaObject()->className() << " 开始运行！" << std::endl;
-        return true;
-    }
+    // 纯虚函数：强制子类实现采样/处理逻辑
+    Q_INVOKABLE virtual void loop() = 0;
 
-    void stop() {
+    Q_INVOKABLE void stop() {
         timer->stop();
     }
 
 public slots:
-    // 纯虚函数：强制子类实现采样/处理逻辑
-    virtual void loop() = 0;
 
-    signals:
-        // 泛化数据类型：T::Ptr（需 T 定义 using Ptr = std::shared_ptr<T>）
-        // void dataReady(typename T::Ptr data);
+    void start(int intervalMs = 10) {
+        qDebug() << "[SensorBase::start] ENTER"
+             << "| class:" << metaObject()->className()
+             << "| thread:" << QThread::currentThreadId()
+             << "| interval:" << intervalMs;
+        timer->setInterval(intervalMs);
+        timer->start();
+        // std::cout << this->metaObject()->className() << " 开始运行！" << std::endl;
+        qDebug() << std::string("SensorBase::start") ;
+        // return true;
+    }
+
+    void onTimeout() {
+        qDebug() << "[SensorBase::onTimeout]" << metaObject()->className()
+             << "running in thread" << QThread::currentThreadId();
+        loop();  // ✅ 运行时调用子类实现，无纯虚函数取址风险
+    }
 
 protected:
     QTimer* timer;  // managed by QObject parent
