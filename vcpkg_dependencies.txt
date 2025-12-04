@@ -1,0 +1,621 @@
+abseil:x64-linux                                  20250127.1#3        Abseil is an open-source collection of C++ libra...
+abseil:x64-linux-dynamic                          20250127.1#3        Abseil is an open-source collection of C++ libra...
+abseil[cxx17]:x64-linux                                               Enable compiler C++17.
+abseil[cxx17]:x64-linux-dynamic                                       Enable compiler C++17.
+alsa:x64-linux                                    1.2.14              The Advanced Linux Sound Architecture (ALSA) - l...
+alsa:x64-linux-dynamic                            1.2.14              The Advanced Linux Sound Architecture (ALSA) - l...
+assimp:x64-linux                                  6.0.2#1             The Open Asset import library
+assimp:x64-linux-dynamic                          6.0.2#1             The Open Asset import library
+at-spi2-atk:x64-linux                             2.38.0#1            Implementation of the ATK interfaces in terms of...
+at-spi2-core:x64-linux                            2.44.1#3            Base DBus XML interfaces for accessibility, the ...
+atk:x64-linux                                     2.38.0#10           GNOME Accessibility Toolkit
+blas:x64-linux                                    2023-04-14#4        Metapackage for packages which provide BLAS
+boost-algorithm:x64-linux                         1.88.0              Boost algorithm module
+boost-align:x64-linux                             1.88.0              Boost align module
+boost-any:x64-linux                               1.88.0              Boost any module
+boost-array:x64-linux                             1.88.0              Boost array module
+boost-asio:x64-linux                              1.88.0              Boost asio module
+boost-assert:x64-linux                            1.88.0              Boost assert module
+boost-assign:x64-linux                            1.89.0              Boost assign module
+boost-atomic:x64-linux                            1.88.0              Boost atomic module
+boost-bimap:x64-linux                             1.88.0              Boost bimap module
+boost-bind:x64-linux                              1.88.0              Boost bind module
+boost-chrono:x64-linux                            1.88.0              Boost chrono module
+boost-circular-buffer:x64-linux                   1.88.0              Boost circular_buffer module
+boost-cmake:x64-linux                             1.88.0              Boost cmake module
+boost-concept-check:x64-linux                     1.88.0              Boost concept_check module
+boost-config:x64-linux                            1.88.0              Boost config module
+boost-container-hash:x64-linux                    1.88.0              Boost container_hash module
+boost-container:x64-linux                         1.88.0              Boost container module
+boost-context:x64-linux                           1.88.0              Boost context module
+boost-conversion:x64-linux                        1.88.0              Boost conversion module
+boost-core:x64-linux                              1.88.0              Boost core module
+boost-crc:x64-linux                               1.88.0              Boost crc module
+boost-date-time:x64-linux                         1.88.0              Boost date_time module
+boost-describe:x64-linux                          1.88.0              Boost describe module
+boost-detail:x64-linux                            1.88.0              Boost detail module
+boost-dynamic-bitset:x64-linux                    1.88.0              Boost dynamic_bitset module
+boost-endian:x64-linux                            1.88.0              Boost endian module
+boost-exception:x64-linux                         1.88.0              Boost exception module
+boost-filesystem:x64-linux                        1.88.0              Boost filesystem module
+boost-foreach:x64-linux                           1.88.0              Boost foreach module
+boost-format:x64-linux                            1.89.0              Boost format module
+boost-function-types:x64-linux                    1.88.0              Boost function_types module
+boost-function:x64-linux                          1.88.0              Boost function module
+boost-functional:x64-linux                        1.88.0              Boost functional module
+boost-fusion:x64-linux                            1.88.0              Boost fusion module
+boost-geometry:x64-linux                          1.88.0              Boost geometry module
+boost-graph:x64-linux                             1.88.0              Boost graph module
+boost-headers:x64-linux                           1.88.0              Boost headers module
+boost-integer:x64-linux                           1.88.0              Boost integer module
+boost-interprocess:x64-linux                      1.88.0              Boost interprocess module
+boost-intrusive:x64-linux                         1.88.0              Boost intrusive module
+boost-io:x64-linux                                1.88.0              Boost io module
+boost-iostreams:x64-linux                         1.88.0              Boost iostreams module
+boost-iostreams[bzip2]:x64-linux                                      Support bzip2 filters
+boost-iostreams[lzma]:x64-linux                                       Support LZMA/xz filters
+boost-iostreams[zlib]:x64-linux                                       Support zlib filters
+boost-iostreams[zstd]:x64-linux                                       Support zstd filters
+boost-iterator:x64-linux                          1.88.0              Boost iterator module
+boost-lambda:x64-linux                            1.88.0              Boost lambda module
+boost-lexical-cast:x64-linux                      1.88.0              Boost lexical_cast module
+boost-math:x64-linux                              1.88.0              Boost math module
+boost-move:x64-linux                              1.88.0              Boost move module
+boost-mp11:x64-linux                              1.88.0              Boost mp11 module
+boost-mpl:x64-linux                               1.88.0              Boost mpl module
+boost-multi-array:x64-linux                       1.88.0              Boost multi_array module
+boost-multi-index:x64-linux                       1.88.0              Boost multi_index module
+boost-multiprecision:x64-linux                    1.88.0              Boost multiprecision module
+boost-numeric-conversion:x64-linux                1.88.0              Boost numeric_conversion module
+boost-optional:x64-linux                          1.88.0              Boost optional module
+boost-parameter:x64-linux                         1.88.0              Boost parameter module
+boost-phoenix:x64-linux                           1.88.0              Boost phoenix module
+boost-polygon:x64-linux                           1.88.0              Boost polygon module
+boost-pool:x64-linux                              1.88.0              Boost pool module
+boost-predef:x64-linux                            1.88.0              Boost predef module
+boost-preprocessor:x64-linux                      1.88.0              Boost preprocessor module
+boost-program-options:x64-linux                   1.88.0              Boost program_options module
+boost-property-map:x64-linux                      1.88.0              Boost property_map module
+boost-property-tree:x64-linux                     1.88.0              Boost property_tree module
+boost-proto:x64-linux                             1.88.0              Boost proto module
+boost-ptr-container:x64-linux                     1.88.0              Boost ptr_container module
+boost-qvm:x64-linux                               1.88.0              Boost qvm module
+boost-random:x64-linux                            1.88.0              Boost random module
+boost-range:x64-linux                             1.88.0              Boost range module
+boost-ratio:x64-linux                             1.88.0              Boost ratio module
+boost-rational:x64-linux                          1.88.0              Boost rational module
+boost-regex:x64-linux                             1.88.0              Boost regex module
+boost-scope:x64-linux                             1.88.0              Boost scope module
+boost-serialization:x64-linux                     1.88.0              Boost serialization module
+boost-signals2:x64-linux                          1.88.0              Boost signals2 module
+boost-smart-ptr:x64-linux                         1.88.0              Boost smart_ptr module
+boost-sort:x64-linux                              1.88.0              Boost sort module
+boost-spirit:x64-linux                            1.88.0              Boost spirit module
+boost-static-assert:x64-linux                     1.88.0              Boost static_assert module
+boost-system:x64-linux                            1.88.0              Boost system module
+boost-thread:x64-linux                            1.88.0              Boost thread module
+boost-throw-exception:x64-linux                   1.88.0              Boost throw_exception module
+boost-timer:x64-linux                             1.89.0              Boost timer module
+boost-tokenizer:x64-linux                         1.88.0              Boost tokenizer module
+boost-tti:x64-linux                               1.88.0              Boost tti module
+boost-tuple:x64-linux                             1.88.0              Boost tuple module
+boost-type-index:x64-linux                        1.88.0              Boost type_index module
+boost-type-traits:x64-linux                       1.88.0              Boost type_traits module
+boost-typeof:x64-linux                            1.88.0              Boost typeof module
+boost-uninstall:x64-linux                         1.88.0              Internal vcpkg port used to uninstall Boost
+boost-unordered:x64-linux                         1.88.0              Boost unordered module
+boost-utility:x64-linux                           1.88.0              Boost utility module
+boost-uuid:x64-linux                              1.88.0              Boost uuid module
+boost-variant2:x64-linux                          1.88.0              Boost variant2 module
+boost-variant:x64-linux                           1.88.0              Boost variant module
+boost-winapi:x64-linux                            1.88.0              Boost winapi module
+boost-xpressive:x64-linux                         1.88.0              Boost xpressive module
+brotli:x64-linux                                  1.1.0#1             a generic-purpose lossless compression algorithm...
+brotli:x64-linux-dynamic                          1.1.0#1             a generic-purpose lossless compression algorithm...
+bzip2:x64-linux                                   1.0.8#6             bzip2 is a freely available, patent free, high-q...
+bzip2:x64-linux-dynamic                           1.0.8#6             bzip2 is a freely available, patent free, high-q...
+bzip2[tool]:x64-linux                                                 Builds bzip2 executable
+bzip2[tool]:x64-linux-dynamic                                         Builds bzip2 executable
+c-ares:x64-linux                                  1.34.5#1            A C library for asynchronous DNS requests
+c-ares:x64-linux-dynamic                          1.34.5#1            A C library for asynchronous DNS requests
+cairo:x64-linux                                   1.18.4              Cairo is a 2D graphics library with support for ...
+cairo[fontconfig]:x64-linux                                           Build with fontconfig
+cairo[freetype]:x64-linux                                             Use the freetype font backend
+cairo[gobject]:x64-linux                                              Build the gobject module
+cairo[x11]:x64-linux                                                  Build with X11 support
+catch2:x64-linux                                  3.9.1               A modern, C++-native, test framework for unit-te...
+cereal:x64-linux                                  1.3.2#1             a header-only C++11 serialization library (built...
+ceres:x64-linux                                   2.2.0#5             non-linear optimization package
+cgns:x64-linux                                    4.5.0#1             The CFD General Notation System (CGNS) provides ...
+cgns[hdf5]:x64-linux                                                  Enable hdf5 support
+cgns[lfs]:x64-linux                                                   Enable LFS support
+curl:x64-linux                                    8.15.0#1            A library for transferring data with URLs
+curl[non-http]:x64-linux                                              Enables protocols beyond HTTP/HTTPS/HTTP2/HTTP3
+curl[openssl]:x64-linux                                               TLS support (OpenSSL)
+curl[ssl]:x64-linux                                                   Default SSL / TLS implementation.
+dbus:x64-linux                                    1.16.2#1            D-Bus specification and reference implementation...
+dbus:x64-linux-dynamic                            1.16.2#1            D-Bus specification and reference implementation...
+dbus[systemd]:x64-linux                                               Build with systemd at_console support
+dbus[systemd]:x64-linux-dynamic                                       Build with systemd at_console support
+dirent:x64-linux                                  1.26                Dirent is a C/C++ programming interface that all...
+dirent:x64-linux-dynamic                          1.26                Dirent is a C/C++ programming interface that all...
+double-conversion:x64-linux                       3.3.1               Efficient binary-decimal and decimal-binary conv...
+double-conversion:x64-linux-dynamic               3.3.1               Efficient binary-decimal and decimal-binary conv...
+draco:x64-linux                                   1.5.7               A library for compressing and decompressing 3D g...
+draco:x64-linux-dynamic                           1.5.7               A library for compressing and decompressing 3D g...
+egl-registry:x64-linux                            2024-01-25          EGL API and Extension Registry
+egl-registry:x64-linux-dynamic                    2024-01-25          EGL API and Extension Registry
+egl:x64-linux                                     2022-12-04          EGL is an interface between Khronos rendering AP...
+egl:x64-linux-dynamic                             2022-12-04          EGL is an interface between Khronos rendering AP...
+eigen3:x64-linux                                  3.4.0#5             C++ template library for linear algebra: matrice...
+expat:x64-linux                                   2.7.1               XML parser library written in C
+expat:x64-linux-dynamic                           2.7.1               XML parser library written in C
+exprtk:x64-linux                                  0.0.3               Simple to use, easy to integrate and extremely e...
+fast-float:x64-linux                              8.0.2               Fast and exact implementation of the C++ from_ch...
+ffmpeg:x64-linux                                  7.1.1#4             A library to decode, encode, transcode, mux, dem...
+ffmpeg:x64-linux-dynamic                          7.1.1#4             A library to decode, encode, transcode, mux, dem...
+ffmpeg[avcodec]:x64-linux                                             Build the avcodec library
+ffmpeg[avcodec]:x64-linux-dynamic                                     Build the avcodec library
+ffmpeg[avdevice]:x64-linux                                            Build the avdevice library
+ffmpeg[avdevice]:x64-linux-dynamic                                    Build the avdevice library
+ffmpeg[avfilter]:x64-linux                                            Build the avfilter library
+ffmpeg[avfilter]:x64-linux-dynamic                                    Build the avfilter library
+ffmpeg[avformat]:x64-linux                                            Build the avformat library
+ffmpeg[avformat]:x64-linux-dynamic                                    Build the avformat library
+ffmpeg[swresample]:x64-linux                                          Build the swresample library
+ffmpeg[swresample]:x64-linux-dynamic                                  Build the swresample library
+ffmpeg[swscale]:x64-linux                                             Build the swscale library
+ffmpeg[swscale]:x64-linux-dynamic                                     Build the swscale library
+fftw3:x64-linux                                   3.3.10#10           FFTW is a C subroutine library for computing the...
+fftw3:x64-linux-dynamic                           3.3.10#10           FFTW is a C subroutine library for computing the...
+flann:x64-linux                                   2022-10-28          Fast Library for Approximate Nearest Neighbors
+flatbuffers:x64-linux                             25.2.10             FlatBuffers is a cross platform serialization li...
+fmt:x64-linux                                     11.2.0              {fmt} is an open-source formatting library provi...
+fontconfig:x64-linux                              2.15.0#4            Library for configuring and customizing font acc...
+fontconfig:x64-linux-dynamic                      2.15.0#4            Library for configuring and customizing font acc...
+freetype:x64-linux                                2.13.3              A library to render fonts.
+freetype:x64-linux-dynamic                        2.13.3              A library to render fonts.
+freetype[brotli]:x64-linux                                            Support decompression of WOFF2 streams
+freetype[brotli]:x64-linux-dynamic                                    Support decompression of WOFF2 streams
+freetype[bzip2]:x64-linux                                             Support bzip2 compressed fonts.
+freetype[bzip2]:x64-linux-dynamic                                     Support bzip2 compressed fonts.
+freetype[png]:x64-linux                                               Support PNG compressed OpenType embedded bitmaps.
+freetype[png]:x64-linux-dynamic                                       Support PNG compressed OpenType embedded bitmaps.
+freetype[zlib]:x64-linux                                              Use zlib instead of internal library for DEFLATE
+freetype[zlib]:x64-linux-dynamic                                      Use zlib instead of internal library for DEFLATE
+fribidi:x64-linux                                 1.0.16              GNU FriBidi is an implementation of the Unicode ...
+g2o:x64-linux                                     2024-12-14#5        g2o: A General Framework for Graph Optimization
+gdk-pixbuf:x64-linux                              2.42.12#4           Image loading library.
+gdk-pixbuf[jpeg]:x64-linux                                            Enable JPEG loader (requires libjpeg)
+gdk-pixbuf[png]:x64-linux                                             Enable PNG loader (requires libpng)
+gdk-pixbuf[tiff]:x64-linux                                            Enable TIFF loader (requires libtiff)
+gettext-libintl:x64-linux                         0.22.5#3            The libintl C library from GNU gettext-runtime.
+gettext-libintl:x64-linux-dynamic                 0.22.5#3            The libintl C library from GNU gettext-runtime.
+gettext:x64-linux                                 0.22.5#2            A GNU framework to help produce multi-lingual me...
+gettext[tools]:x64-linux                                              Build gettext tools
+gflags:x64-linux                                  2.2.2#9             A C++ library that implements commandline flags ...
+gklib:x64-linux                                   2025-07-06          General helper libraries for KarypisLab.
+glew:x64-linux                                    2.2.0#6             The OpenGL Extension Wrangler Library (GLEW) is ...
+glib:x64-linux                                    2.84.2#2            Portable, general-purpose utility library.
+glib:x64-linux-dynamic                            2.84.2#2            Portable, general-purpose utility library.
+glog:x64-linux                                    0.7.1               C++ implementation of the Google logging module
+gperf:x64-linux                                   3.3                 GNU perfect hash function generator
+grpc:x64-linux                                    1.71.0#2            gRPC is a modern, open source, high-performance ...
+grpc:x64-linux-dynamic                            1.71.0#2            gRPC is a modern, open source, high-performance ...
+grpc[codegen]:x64-linux                                               Build code generator machinery
+gstreamer:x64-linux                               1.26.4              GStreamer open-source multimedia framework core ...
+gstreamer:x64-linux-dynamic                       1.26.4              GStreamer open-source multimedia framework core ...
+gstreamer[plugins-bad]:x64-linux                                      'Bad' GStreamer plugins and helper libraries
+gstreamer[plugins-bad]:x64-linux-dynamic                              'Bad' GStreamer plugins and helper libraries
+gstreamer[plugins-base]:x64-linux                                     'Base' GStreamer plugins and helper libraries
+gstreamer[plugins-base]:x64-linux-dynamic                             'Base' GStreamer plugins and helper libraries
+gtk3:x64-linux                                    3.24.43#1           Portable library for creating graphical user int...
+gtsam:x64-linux                                   4.2.0#1             GTSAM is a library of C++ classes that implement...
+gumbo:x64-linux                                   0.12.3              An HTML5 parsing library in pure C99
+gumbo:x64-linux-dynamic                           0.12.3              An HTML5 parsing library in pure C99
+harfbuzz:x64-linux                                11.3.3              HarfBuzz OpenType text shaping engine
+harfbuzz:x64-linux-dynamic                        11.3.3              HarfBuzz OpenType text shaping engine
+harfbuzz[freetype]:x64-linux                                          Enable FreeType support
+harfbuzz[freetype]:x64-linux-dynamic                                  Enable FreeType support
+hdf5:x64-linux                                    1.14.6              HDF5 is a data model, library, and file format f...
+hdf5[szip]:x64-linux                                                  Build with szip
+hdf5[zlib]:x64-linux                                                  Build with zlib
+hunspell:x64-linux                                1.7.2#1             The most popular spellchecking library.
+hunspell:x64-linux-dynamic                        1.7.2#1             The most popular spellchecking library.
+icu:x64-linux                                     74.2#6              Mature and widely used Unicode and localization ...
+icu:x64-linux-dynamic                             74.2#6              Mature and widely used Unicode and localization ...
+icu[tools]:x64-linux                                                  Build tools
+jack2:x64-linux                                   1.9.22              Cross-platform API that enables device sharing a...
+jack2:x64-linux-dynamic                           1.9.22              Cross-platform API that enables device sharing a...
+jasper:x64-linux                                  4.2.8               Open source implementation of the JPEG-2000 Part...
+jasper:x64-linux-dynamic                          4.2.8               Open source implementation of the JPEG-2000 Part...
+jhasse-poly2tri:x64-linux                         2023-12-27#2        Sweep-line algorithm for constrained Delaunay tr...
+jhasse-poly2tri:x64-linux-dynamic                 2023-12-27#2        Sweep-line algorithm for constrained Delaunay tr...
+jsoncpp:x64-linux                                 1.9.6               JsonCpp is a C++ library that allows manipulatin...
+jsoncpp:x64-linux-dynamic                         1.9.6               JsonCpp is a C++ library that allows manipulatin...
+kubazip:x64-linux                                 0.3.5               A portable, simple zip library written in C
+kubazip:x64-linux-dynamic                         0.3.5               A portable, simple zip library written in C
+lapack-reference:x64-linux                        3.12.1#1            LAPACK - Linear Algebra PACKage
+lapack-reference[blas-select]:x64-linux                               Use external optimized BLAS
+lapack-reference[noblas]:x64-linux                                    Use external optimized BLAS
+lapack:x64-linux                                  2023-06-10#3        Metapackage for packages which provide LAPACK
+lcms:x64-linux                                    2.17                Little CMS.
+lcms:x64-linux-dynamic                            2.17                Little CMS.
+libaec:x64-linux                                  1.1.3#1             Adaptive Entropy Coding library
+libarchive:x64-linux                              3.8.1               Library for reading and writing streaming archives
+libarchive:x64-linux-dynamic                      3.8.1               Library for reading and writing streaming archives
+libarchive[bzip2]:x64-linux                                           BZip2 support
+libarchive[bzip2]:x64-linux-dynamic                                   BZip2 support
+libarchive[crypto]:x64-linux                                          Support for cryptographic features
+libarchive[crypto]:x64-linux-dynamic                                  Support for cryptographic features
+libarchive[lz4]:x64-linux                                             Lz4 support
+libarchive[lz4]:x64-linux-dynamic                                     Lz4 support
+libarchive[lzma]:x64-linux                                            Lzma support
+libarchive[lzma]:x64-linux-dynamic                                    Lzma support
+libarchive[xar]:x64-linux                                             Xar support
+libarchive[xar]:x64-linux-dynamic                                     Xar support
+libarchive[zstd]:x64-linux                                            Zstd support
+libarchive[zstd]:x64-linux-dynamic                                    Zstd support
+libatomic-ops:x64-linux                           7.8.2               The atomic_ops project (Atomic memory update ope...
+libatomic-ops:x64-linux-dynamic                   7.8.2               The atomic_ops project (Atomic memory update ope...
+libb2:x64-linux                                   0.98.1#7            C library providing BLAKE2b, BLAKE2s, BLAKE2bp, ...
+libb2:x64-linux-dynamic                           0.98.1#7            C library providing BLAKE2b, BLAKE2s, BLAKE2bp, ...
+libcap:x64-linux                                  2.73#1              A library for getting and setting POSIX.1e (form...
+libcap:x64-linux-dynamic                          2.73#1              A library for getting and setting POSIX.1e (form...
+libepoxy:x64-linux                                1.5.10#2            Epoxy is a library for handling OpenGL function ...
+libffi:x64-linux                                  3.5.2               Portable, high level programming interface to va...
+libffi:x64-linux-dynamic                          3.5.2               Portable, high level programming interface to va...
+libflac:x64-linux                                 1.5.0               Library for manipulating FLAC files
+libflac:x64-linux-dynamic                         1.5.0               Library for manipulating FLAC files
+libflac[stack-protector]:x64-linux                                    Build with stack smashing protection
+libflac[stack-protector]:x64-linux-dynamic                            Build with stack smashing protection
+libharu:x64-linux                                 2.4.4#1             libharu - free PDF library
+libiconv:x64-linux                                1.18#1              iconv() text conversion.
+libiconv:x64-linux-dynamic                        1.18#1              iconv() text conversion.
+libjpeg-turbo:x64-linux                           3.1.1               libjpeg-turbo is a JPEG image codec that uses SI...
+libjpeg-turbo:x64-linux-dynamic                   3.1.1               libjpeg-turbo is a JPEG image codec that uses SI...
+liblzma:x64-linux                                 5.8.1               Compression library with an API similar to that ...
+liblzma:x64-linux-dynamic                         5.8.1               Compression library with an API similar to that ...
+libmount:x64-linux                                2.40                Block device identification library from util-linux
+libmount:x64-linux-dynamic                        2.40                Block device identification library from util-linux
+libogg:x64-linux                                  1.3.6               Ogg is a multimedia container format, and the na...
+libogg:x64-linux-dynamic                          1.3.6               Ogg is a multimedia container format, and the na...
+libpng:x64-linux                                  1.6.50              libpng is a library implementing an interface fo...
+libpng:x64-linux-dynamic                          1.6.50              libpng is a library implementing an interface fo...
+libpq:x64-linux                                   16.9                The official database access API of postgresql
+libpq:x64-linux-dynamic                           16.9                The official database access API of postgresql
+libpq[lz4]:x64-linux                                                  Use lz4
+libpq[lz4]:x64-linux-dynamic                                          Use lz4
+libpq[openssl]:x64-linux                                              support for encrypted client connections and ran...
+libpq[openssl]:x64-linux-dynamic                                      support for encrypted client connections and ran...
+libpq[zlib]:x64-linux                                                 Use zlib
+libpq[zlib]:x64-linux-dynamic                                         Use zlib
+libsndfile:x64-linux                              1.2.2#1             A library for reading and writing audio files
+libsndfile:x64-linux-dynamic                      1.2.2#1             A library for reading and writing audio files
+libsndfile[external-libs]:x64-linux                                   Enable FLAC, Vorbis, and Opus codecs
+libsndfile[external-libs]:x64-linux-dynamic                           Enable FLAC, Vorbis, and Opus codecs
+libsndfile[mpeg]:x64-linux                                            Enable MPEG codecs
+libsndfile[mpeg]:x64-linux-dynamic                                    Enable MPEG codecs
+libsystemd:x64-linux                              256.4               Libsystemd
+libsystemd:x64-linux-dynamic                      256.4               Libsystemd
+libtheora:x64-linux                               1.2.0               Theora is a free and open video compression form...
+libuuid:x64-linux                                 1.0.3#15            Universally unique id library
+libuuid:x64-linux-dynamic                         1.0.3#15            Universally unique id library
+libvorbis:x64-linux                               1.3.7#4             Ogg Vorbis is a fully open, non-proprietary, pat...
+libvorbis:x64-linux-dynamic                       1.3.7#4             Ogg Vorbis is a fully open, non-proprietary, pat...
+libwebp:x64-linux                                 1.6.0               WebP codec: library to encode and decode images ...
+libwebp:x64-linux-dynamic                         1.6.0               WebP codec: library to encode and decode images ...
+libwebp[libwebpmux]:x64-linux                                         Build the libwebpmux library
+libwebp[libwebpmux]:x64-linux-dynamic                                 Build the libwebpmux library
+libwebp[nearlossless]:x64-linux                                       Enable near-lossless encoding
+libwebp[nearlossless]:x64-linux-dynamic                               Enable near-lossless encoding
+libwebp[simd]:x64-linux                                               Enable any SIMD optimization.
+libwebp[simd]:x64-linux-dynamic                                       Enable any SIMD optimization.
+libxcrypt:x64-linux                               4.4.38#1            libxcrypt is a modern library for one-way hashin...
+libxcrypt:x64-linux-dynamic                       4.4.38#1            libxcrypt is a modern library for one-way hashin...
+libxml2:x64-linux                                 2.14.5              Libxml2 is the XML C parser and toolkit develope...
+libxml2:x64-linux-dynamic                         2.14.5              Libxml2 is the XML C parser and toolkit develope...
+libxml2[iconv]:x64-linux                                              Add ICONV support
+libxml2[iconv]:x64-linux-dynamic                                      Add ICONV support
+libxml2[icu]:x64-linux                                                Add ICU support
+libxml2[icu]:x64-linux-dynamic                                        Add ICU support
+libxml2[zlib]:x64-linux                                               Use ZLib
+libxml2[zlib]:x64-linux-dynamic                                       Use ZLib
+libxslt:x64-linux                                 1.1.43#1            Libxslt is a XSLT library implemented in C for X...
+libxslt:x64-linux-dynamic                         1.1.43#1            Libxslt is a XSLT library implemented in C for X...
+libxslt[profiler]:x64-linux                                           Build with profiling support
+libxslt[profiler]:x64-linux-dynamic                                   Build with profiling support
+libxslt[thread]:x64-linux                                             Enable multi-threading support
+libxslt[thread]:x64-linux-dynamic                                     Enable multi-threading support
+libyaml:x64-linux                                 0.2.5#5             A C library for parsing and emitting YAML.
+libyaml:x64-linux-dynamic                         0.2.5#5             A C library for parsing and emitting YAML.
+litehtml:x64-linux                                0.9.0               litehtml is the lightweight HTML rendering engin...
+litehtml:x64-linux-dynamic                        0.9.0               litehtml is the lightweight HTML rendering engin...
+lz4:x64-linux                                     1.10.0              Lossless compression algorithm, providing compre...
+lz4:x64-linux-dynamic                             1.10.0              Lossless compression algorithm, providing compre...
+meshoptimizer:x64-linux                           0.24                Mesh optimization library that makes meshes smal...
+meshoptimizer:x64-linux-dynamic                   0.24                Mesh optimization library that makes meshes smal...
+metis:x64-linux                                   2025-07-04          Serial Graph Partitioning and Fill-reducing Matr...
+minizip:x64-linux                                 1.3.1#1             Minizip zip file manipulation library
+minizip:x64-linux-dynamic                         1.3.1#1             Minizip zip file manipulation library
+mp3lame:x64-linux                                 3.100#15            LAME is a high quality MPEG Audio Layer III (MP3...
+mp3lame:x64-linux-dynamic                         3.100#15            LAME is a high quality MPEG Audio Layer III (MP3...
+mpg123:x64-linux                                  1.32.9#1            mpg123 is a real time MPEG 1.0/2.0/2.5 audio pla...
+mpg123:x64-linux-dynamic                          1.32.9#1            mpg123 is a real time MPEG 1.0/2.0/2.5 audio pla...
+netcdf-c:x64-linux                                4.9.3               A set of self-describing, machine-independent da...
+netcdf-c[dap]:x64-linux                                               DAP remote access client support
+netcdf-c[nczarr]:x64-linux                                            NCZarr cloud storage access support
+netcdf-c[netcdf-4]:x64-linux                                          netCDF-4 support
+nlohmann-json:x64-linux                           3.12.0#1            JSON for Modern C++
+nspr:x64-linux                                    4.36#1              Netscape portable runtime
+nspr:x64-linux-dynamic                            4.36#1              Netscape portable runtime
+nss:x64-linux                                     3.113.1             Network Security Services from Mozilla
+nss:x64-linux-dynamic                             3.113.1             Network Security Services from Mozilla
+open62541:x64-linux                               1.4.12              open62541 is an open source C (C99) implementati...
+open62541:x64-linux-dynamic                       1.4.12              open62541 is an open source C (C99) implementati...
+open62541[historizing]:x64-linux                                      Enable basic support for historical access (clie...
+open62541[historizing]:x64-linux-dynamic                              Enable basic support for historical access (clie...
+open62541[methodcalls]:x64-linux                                      Enable the Method service set
+open62541[methodcalls]:x64-linux-dynamic                              Enable the Method service set
+open62541[openssl]:x64-linux                                          Enable encryption support (uses OpenSSL)
+open62541[openssl]:x64-linux-dynamic                                  Enable encryption support (uses OpenSSL)
+open62541[subscriptions-events]:x64-linux                             Enable event monitoring
+open62541[subscriptions-events]:x64-linux-dynamic                     Enable event monitoring
+open62541[subscriptions]:x64-linux                                    Enable subscriptions support
+open62541[subscriptions]:x64-linux-dynamic                            Enable subscriptions support
+openblas:x64-linux                                0.3.29              OpenBLAS is an optimized BLAS library based on G...
+opencv4:x64-linux                                 4.11.0#4            computer vision library
+opencv4[calib3d]:x64-linux                                            calib3d module
+opencv4[dnn]:x64-linux                                                Enable dnn module
+opencv4[fs]:x64-linux                                                 Enable filesystem support
+opencv4[gapi]:x64-linux                                               Enable gapi module
+opencv4[gtk]:x64-linux                                                GTK support for opencv
+opencv4[highgui]:x64-linux                                            highgui module
+opencv4[intrinsics]:x64-linux                                         Enable intrinsics
+opencv4[jpeg]:x64-linux                                               JPEG support for opencv
+opencv4[png]:x64-linux                                                PNG support for opencv
+opencv4[quirc]:x64-linux                                              Enable QR code module
+opencv4[thread]:x64-linux                                             Enable thread support
+opencv4[tiff]:x64-linux                                               TIFF support for opencv
+opencv4[webp]:x64-linux                                               WebP support for opencv
+opengl-registry:x64-linux                         2024-02-10#1        OpenGL, OpenGL ES, and OpenGL ES-SC API and Exte...
+opengl-registry:x64-linux-dynamic                 2024-02-10#1        OpenGL, OpenGL ES, and OpenGL ES-SC API and Exte...
+opengl:x64-linux                                  2022-12-04#3        Open Graphics Library (OpenGL)[3][4][5] is a cro...
+opengl:x64-linux-dynamic                          2022-12-04#3        Open Graphics Library (OpenGL)[3][4][5] is a cro...
+openjpeg:x64-linux                                2.5.3               OpenJPEG is an open-source JPEG 2000 codec writt...
+openjpeg:x64-linux-dynamic                        2.5.3               OpenJPEG is an open-source JPEG 2000 codec writt...
+openssl:x64-linux                                 3.5.2               OpenSSL is an open source project that provides ...
+openssl:x64-linux-dynamic                         3.5.2               OpenSSL is an open source project that provides ...
+openxr-loader:x64-linux                           1.1.45#1            A royalty-free, open standard that provides high...
+openxr-loader:x64-linux-dynamic                   1.1.45#1            A royalty-free, open standard that provides high...
+opus:x64-linux                                    1.5.2               Totally open, royalty-free, highly versatile aud...
+opus:x64-linux-dynamic                            1.5.2               Totally open, royalty-free, highly versatile aud...
+pango:x64-linux                                   1.56.1#2            Text and font handling library.
+pcl:x64-linux                                     1.15.0#3            Point Cloud Library (PCL) is open source library...
+pcl[qt]:x64-linux                                                     Qt support for PCL
+pcl[visualization]:x64-linux                                          Build visualization
+pcl[vtk]:x64-linux                                                    An alias for visualization
+pcre2:x64-linux                                   10.45               Regular Expression pattern matching using the sa...
+pcre2:x64-linux-dynamic                           10.45               Regular Expression pattern matching using the sa...
+pcre2[jit]:x64-linux                                                  Enable support for Just-In-Time compiling regex ...
+pcre2[jit]:x64-linux-dynamic                                          Enable support for Just-In-Time compiling regex ...
+pcre2[platform-default-features]:x64-linux                            Enable default features
+pcre2[platform-default-features]:x64-linux-dynamic                    Enable default features
+pegtl:x64-linux                                   3.2.8               The Parsing Expression Grammar Template Library ...
+pixman:x64-linux                                  0.44.2              Pixman is a low-level software library for pixel...
+pkgconf:x64-linux                                 2.5.1               pkgconf is a program which helps to configure co...
+polyclipping:x64-linux                            6.4.2#13            The Clipper library performs clipping and offset...
+polyclipping:x64-linux-dynamic                    6.4.2#13            The Clipper library performs clipping and offset...
+proj:x64-linux                                    9.6.2               PROJ library for cartographic projections
+proj[net]:x64-linux                                                   Enable network support
+proj[tiff]:x64-linux                                                  Enable TIFF support to read some grids
+protobuf:x64-linux                                5.29.5#1            Google's language-neutral, platform-neutral, ext...
+protobuf:x64-linux-dynamic                        5.29.5#1            Google's language-neutral, platform-neutral, ext...
+pthread:x64-linux                                 3.0.0#2             empty package, linking to other port
+pthread:x64-linux-dynamic                         3.0.0#2             empty package, linking to other port
+pthreads:x64-linux                                3.0.0#14            Meta-package that provides PThreads4W on Windows...
+pthreads:x64-linux-dynamic                        3.0.0#14            Meta-package that provides PThreads4W on Windows...
+pugixml:x64-linux                                 1.15                Light-weight, simple and fast XML parser for C++...
+pugixml:x64-linux-dynamic                         1.15                Light-weight, simple and fast XML parser for C++...
+pulseaudio:x64-linux                              17.0#3              PulseAudio is a sound server, originally created...
+pulseaudio:x64-linux-dynamic                      17.0#3              PulseAudio is a sound server, originally created...
+qhull:x64-linux                                   8.0.2#5             computes the convex hull, Delaunay triangulation...
+qt3d:x64-linux                                    6.9.1               Qt wrapper for existing OPC UA stacks
+qt3d:x64-linux-dynamic                            6.9.1               Qt wrapper for existing OPC UA stacks
+qt3d[animation]:x64-linux                                             Use the 3D Animation Aspect library
+qt3d[animation]:x64-linux-dynamic                                     Use the 3D Animation Aspect library
+qt3d[assimp]:x64-linux                                                Build with assimp
+qt3d[assimp]:x64-linux-dynamic                                        Build with assimp
+qt3d[extras]:x64-linux                                                Use the 3D Extra library
+qt3d[extras]:x64-linux-dynamic                                        Use the 3D Extra library
+qt3d[input]:x64-linux                                                 Use the 3D Input Aspect library
+qt3d[input]:x64-linux-dynamic                                         Use the 3D Input Aspect library
+qt3d[logic]:x64-linux                                                 Use the 3D Logic Aspect library
+qt3d[logic]:x64-linux-dynamic                                         Use the 3D Logic Aspect library
+qt3d[qml]:x64-linux                                                   Build QML imports
+qt3d[qml]:x64-linux-dynamic                                           Build QML imports
+qt3d[render]:x64-linux                                                Use the 3D Render Aspect library
+qt3d[render]:x64-linux-dynamic                                        Use the 3D Render Aspect library
+qt3d[rhi]:x64-linux                                                   Enable RHI renderer
+qt3d[rhi]:x64-linux-dynamic                                           Enable RHI renderer
+qt5compat:x64-linux                               6.9.1               The Qt 5 Core Compat module contains the Qt 5 Co...
+qt5compat:x64-linux-dynamic                       6.9.1               The Qt 5 Core Compat module contains the Qt 5 Co...
+qt5compat[big-codecs]:x64-linux                                       Supports big codecs, e.g. CJK.
+qt5compat[big-codecs]:x64-linux-dynamic                               Supports big codecs, e.g. CJK.
+qt5compat[codecs]:x64-linux                                           Supports non-unicode text conversions.
+qt5compat[codecs]:x64-linux-dynamic                                   Supports non-unicode text conversions.
+qt5compat[qml]:x64-linux                                              Build QML imports
+qt5compat[qml]:x64-linux-dynamic                                      Build QML imports
+qt5compat[textcodec]:x64-linux                                        Supports conversions between text encodings.
+qt5compat[textcodec]:x64-linux-dynamic                                Supports conversions between text encodings.
+qtapplicationmanager:x64-linux                    6.9.1               Qt component for application lifecycle management
+qtapplicationmanager:x64-linux-dynamic            6.9.1               Qt component for application lifecycle management
+qtapplicationmanager[installer]:x64-linux                             Enable the installer component.
+qtapplicationmanager[installer]:x64-linux-dynamic                     Enable the installer component.
+qtapplicationmanager[package-server]:x64-linux                        Build the package-server.
+qtapplicationmanager[package-server]:x64-linux-...                    Build the package-server.
+qtapplicationmanager[systemd-watchdog]:x64-linux                      Enable the systemd-watchdog component.
+qtapplicationmanager[systemd-watchdog]:x64-linu...                    Enable the systemd-watchdog component.
+qtbase:x64-linux                                  6.9.1               Qt Base (Core, Gui, Widgets, Network, ...)
+qtbase:x64-linux-dynamic                          6.9.1               Qt Base (Core, Gui, Widgets, Network, ...)
+qtbase[brotli]:x64-linux                                              Support for downloading and decompressing resour...
+qtbase[brotli]:x64-linux-dynamic                                      Support for downloading and decompressing resour...
+qtbase[concurrent]:x64-linux                                          Provides a high-level multi-threading API. Qt Co...
+qtbase[concurrent]:x64-linux-dynamic                                  Provides a high-level multi-threading API. Qt Co...
+qtbase[dbus]:x64-linux                                                Qt D-Bus
+qtbase[dbus]:x64-linux-dynamic                                        Qt D-Bus
+qtbase[dnslookup]:x64-linux                                           Enable DNS lookup support
+qtbase[dnslookup]:x64-linux-dynamic                                   Enable DNS lookup support
+qtbase[doubleconversion]:x64-linux                                    Enable double conversion support
+qtbase[doubleconversion]:x64-linux-dynamic                            Enable double conversion support
+qtbase[egl]:x64-linux                                                 EGL
+qtbase[egl]:x64-linux-dynamic                                         EGL
+qtbase[fontconfig]:x64-linux                                          Use fontconfig
+qtbase[fontconfig]:x64-linux-dynamic                                  Use fontconfig
+qtbase[freetype]:x64-linux                                            Supports the FreeType 2 font engine (and its sup...
+qtbase[freetype]:x64-linux-dynamic                                    Supports the FreeType 2 font engine (and its sup...
+qtbase[gui]:x64-linux                                                 Qt Gui
+qtbase[gui]:x64-linux-dynamic                                         Qt Gui
+qtbase[harfbuzz]:x64-linux                                            Use harfbuzz
+qtbase[harfbuzz]:x64-linux-dynamic                                    Use harfbuzz
+qtbase[icu]:x64-linux                                                 Enable ICU support
+qtbase[icu]:x64-linux-dynamic                                         Enable ICU support
+qtbase[jpeg]:x64-linux                                                Enable JPEG
+qtbase[jpeg]:x64-linux-dynamic                                        Enable JPEG
+qtbase[network]:x64-linux                                             Qt Network
+qtbase[network]:x64-linux-dynamic                                     Qt Network
+qtbase[opengl]:x64-linux                                              OpenGL
+qtbase[opengl]:x64-linux-dynamic                                      OpenGL
+qtbase[openssl]:x64-linux                                             Enable OpenSSL
+qtbase[openssl]:x64-linux-dynamic                                     Enable OpenSSL
+qtbase[pcre2]:x64-linux                                               Enable PCRE2 support
+qtbase[pcre2]:x64-linux-dynamic                                       Enable PCRE2 support
+qtbase[png]:x64-linux                                                 Enable PNG
+qtbase[png]:x64-linux-dynamic                                         Enable PNG
+qtbase[sql-psql]:x64-linux                                            Enable SQL Driver psql
+qtbase[sql-psql]:x64-linux-dynamic                                    Enable SQL Driver psql
+qtbase[sql-sqlite]:x64-linux                                          Enable SQL Driver sqlite
+qtbase[sql-sqlite]:x64-linux-dynamic                                  Enable SQL Driver sqlite
+qtbase[sql]:x64-linux                                                 Qt Sql
+qtbase[sql]:x64-linux-dynamic                                         Qt Sql
+qtbase[testlib]:x64-linux                                             Qt Testlib
+qtbase[testlib]:x64-linux-dynamic                                     Qt Testlib
+qtbase[thread]:x64-linux                                              Thread support; provides QThread and related cla...
+qtbase[thread]:x64-linux-dynamic                                      Thread support; provides QThread and related cla...
+qtbase[widgets]:x64-linux                                             Qt Widgets
+qtbase[widgets]:x64-linux-dynamic                                     Qt Widgets
+qtbase[xcb-xlib]:x64-linux                                            xcb-xlib
+qtbase[xcb-xlib]:x64-linux-dynamic                                    xcb-xlib
+qtbase[xcb]:x64-linux                                                 XCB
+qtbase[xcb]:x64-linux-dynamic                                         XCB
+qtbase[xkb]:x64-linux                                                 XKB
+qtbase[xkb]:x64-linux-dynamic                                         XKB
+qtbase[xkbcommon-x11]:x64-linux                                       xkbcommon_x11
+qtbase[xkbcommon-x11]:x64-linux-dynamic                               xkbcommon_x11
+qtbase[xlib]:x64-linux                                                XLib
+qtbase[xlib]:x64-linux-dynamic                                        XLib
+qtbase[xrender]:x64-linux                                             XRender for native painting
+qtbase[xrender]:x64-linux-dynamic                                     XRender for native painting
+qtbase[zstd]:x64-linux                                                Zstandard support
+qtbase[zstd]:x64-linux-dynamic                                        Zstandard support
+qtcharts:x64-linux                                6.9.1               The Qt Charts module provides a set of easy-to-u...
+qtcharts:x64-linux-dynamic                        6.9.1               The Qt Charts module provides a set of easy-to-u...
+qtcharts[designer]:x64-linux                                          Build Designer plugin
+qtcharts[designer]:x64-linux-dynamic                                  Build Designer plugin
+qtcharts[qml]:x64-linux                                               Build QML imports
+qtcharts[qml]:x64-linux-dynamic                                       Build QML imports
+qtcoap:x64-linux                                  6.9.1               Qt CoAP implements the client side of CoAP.
+qtcoap:x64-linux-dynamic                          6.9.1               Qt CoAP implements the client side of CoAP.
+qtconnectivity:x64-linux                          6.9.1               The Qt Connectivity module provides access to Bl...
+qtconnectivity:x64-linux-dynamic                  6.9.1               The Qt Connectivity module provides access to Bl...
+qtdatavis3d:x64-linux                             6.9.1               The Qt Data Visualization module enables you to ...
+qtdatavis3d:x64-linux-dynamic                     6.9.1               The Qt Data Visualization module enables you to ...
+qtdeclarative:x64-linux                           6.9.1               Qt Declarative (Quick 2)
+qtdeclarative:x64-linux-dynamic                   6.9.1               Qt Declarative (Quick 2)
+qtdeviceutilities:x64-linux                       6.9.1               Qt Device Utilities provides functionality that ...
+qtdoc:x64-linux                                   6.9.1               The Qt documentation.
+qtgraphs:x64-linux                                6.9.1               The Qt Graphs module enables you to visualize da...
+qtgrpc:x64-linux                                  6.9.1               The Qt GRPC and Qt Protobuf modules together all...
+qthttpserver:x64-linux                            6.9.1               Qt HTTP Server supports building HTTP server fun...
+qthttpserver:x64-linux-dynamic                    6.9.1               Qt HTTP Server supports building HTTP server fun...
+qtlanguageserver:x64-linux                        6.9.1               An implementation of the Language Server Protocol.
+qtlanguageserver:x64-linux-dynamic                6.9.1               An implementation of the Language Server Protocol.
+qtmultimedia:x64-linux                            6.9.1               Qt Multimedia is an add-on module that provides ...
+qtmultimedia[gstreamer]:x64-linux                                     Build with gstreamer
+qtmultimedia[widgets]:x64-linux                                       Build Multimedia Widgets
+qtquick3d:x64-linux                               6.9.1               Qt Quick 3D provides a high-level API for creati...
+qtquick3d[openxr]:x64-linux                                           OpenXR support
+qtquicktimeline:x64-linux                         6.9.1               The Qt Quick Timeline module enables keyframe-ba...
+qtshadertools:x64-linux                           6.9.1               The Qt Shader Tools module is designed to provid...
+qtshadertools:x64-linux-dynamic                   6.9.1               The Qt Shader Tools module is designed to provid...
+qtsvg:x64-linux                                   6.9.1               Qt SVG provides classes for rendering and displa...
+qtsvg:x64-linux-dynamic                           6.9.1               Qt SVG provides classes for rendering and displa...
+qttools:x64-linux                                 6.9.1               A collection of tools and utilities that come wi...
+qttools:x64-linux-dynamic                         6.9.1               A collection of tools and utilities that come wi...
+qttools[assistant]:x64-linux                                          Build Qt Assistant
+qttools[assistant]:x64-linux-dynamic                                  Build Qt Assistant
+qttools[designer]:x64-linux                                           Build Qt Designer
+qttools[designer]:x64-linux-dynamic                                   Build Qt Designer
+qttools[linguist]:x64-linux                                           Build Qt Linguist components
+qttools[linguist]:x64-linux-dynamic                                   Build Qt Linguist components
+qttools[qml]:x64-linux                                                Build QML imports
+qttools[qml]:x64-linux-dynamic                                        Build QML imports
+quirc:x64-linux                                   1.2                 quirc is one of the C library available for scan...
+rapidjson:x64-linux                               2025-02-26          A fast JSON parser/generator for C++ with both S...
+rapidjson:x64-linux-dynamic                       2025-02-26          A fast JSON parser/generator for C++ with both S...
+re2:x64-linux                                     2025-08-05          RE2 is a fast, safe, thread-friendly alternative...
+re2:x64-linux-dynamic                             2025-08-05          RE2 is a fast, safe, thread-friendly alternative...
+seacas:x64-linux                                  2022-11-22#9        The Sandia Engineering Analysis Code Access Syst...
+soxr:x64-linux                                    0.1.3#8             High quality audio resampling
+soxr:x64-linux-dynamic                            0.1.3#8             High quality audio resampling
+speex:x64-linux                                   1.2.1#1             Speex is an Open Source/Free Software patent-fre...
+speex:x64-linux-dynamic                           1.2.1#1             Speex is an Open Source/Free Software patent-fre...
+sqlite3:x64-linux                                 3.50.4              SQLite is a software library that implements a s...
+sqlite3:x64-linux-dynamic                         3.50.4              SQLite is a software library that implements a s...
+sqlite3[json1]:x64-linux                                              Enable JSON functionality for sqlite3
+sqlite3[json1]:x64-linux-dynamic                                      Enable JSON functionality for sqlite3
+sqlite3[tool]:x64-linux                                               Build sqlite3 executable
+stb:x64-linux                                     2024-07-29#1        public domain header-only libraries
+stb:x64-linux-dynamic                             2024-07-29#1        public domain header-only libraries
+suitesparse-amd:x64-linux                         3.3.3               AMD: Routines for permuting sparse matrices prio...
+suitesparse-camd:x64-linux                        3.3.3               AMD: Routines for permuting sparse matrices prio...
+suitesparse-ccolamd:x64-linux                     3.3.4               CCOLAMD: Routines for constrained column approxi...
+suitesparse-cholmod:x64-linux                     5.3.0               CHOLMOD: Routines for factorizing sparse symmetr...
+suitesparse-cholmod[partition]:x64-linux                              Build Partition module
+suitesparse-colamd:x64-linux                      3.3.4               COLAMD: Routines for column approximate minimum ...
+suitesparse-config:x64-linux                      7.8.3               Configuration for SuiteSparse libraries
+suitesparse-cxsparse:x64-linux                    4.4.1               CXSparse: Software package for permuting a matri...
+tbb:x64-linux                                     2022.2.0            Intel's Threading Building Blocks.
+tiff:x64-linux                                    4.7.0               A library that supports the manipulation of TIFF...
+tiff[jpeg]:x64-linux                                                  Support JPEG compression in TIFF image files
+tiff[lzma]:x64-linux                                                  Support LZMA compression in TIFF image files
+tiff[zip]:x64-linux                                                   Support ZIP/deflate compression in TIFF image files
+tinyxml2:x64-linux                                11.0.0              A simple, small, efficient, C++ XML parser
+utf8-range:x64-linux                              5.29.5              Fast UTF-8 validation with Range algorithm (NEON...
+utf8-range:x64-linux-dynamic                      5.29.5              Fast UTF-8 validation with Range algorithm (NEON...
+utfcpp:x64-linux                                  4.0.6               UTF-8 with C++ in a Portable Way
+utfcpp:x64-linux-dynamic                          4.0.6               UTF-8 with C++ in a Portable Way
+vcpkg-boost:x64-linux                             2025-03-29          
+vcpkg-cmake-config:x64-linux                      2024-05-23          
+vcpkg-cmake-get-vars:x64-linux                    2025-05-29          
+vcpkg-cmake:x64-linux                             2024-04-23          
+vcpkg-get-python-packages:x64-linux               2025-04-05          
+vcpkg-make:x64-linux                              2025-07-09          
+vcpkg-pkgconfig-get-modules:x64-linux             2024-04-03          
+vcpkg-tool-meson:x64-linux                        1.8.2               Meson build system
+verdict:x64-linux                                 1.4.0               Compute quality functions of 2 and 3-dimensional...
+vtk:x64-linux                                     9.3.0-pv5.12....    Software system for 3D computer graphics, image ...
+vtk[cgns]:x64-linux                                                   CGNS functionality for VTK
+vtk[libharu]:x64-linux                                                PDF functionality for VTK
+vtk[libtheora]:x64-linux                                              Compressed ogg functionality for VTK
+vtk[netcdf]:x64-linux                                                 NetCDF functionality for VTK
+vtk[opengl]:x64-linux                                                 All opengl related modules
+vtk[proj]:x64-linux                                                   Geographic projection functionality for VTK
+vtk[qt]:x64-linux                                                     Qt functionality for VTK
+vtk[seacas]:x64-linux                                                 Exodus and IOSS functionality for VTK
+vtk[sql]:x64-linux                                                    SQL functionality for VTK
+zeromq:x64-linux                                  4.3.5#2             The ZeroMQ lightweight messaging kernel is a lib...
+zlib:x64-linux                                    1.3.1               A compression library
+zlib:x64-linux-dynamic                            1.3.1               A compression library
+zstd:x64-linux                                    1.5.7               Zstandard - Fast real-time compression algorithm
+zstd:x64-linux-dynamic                            1.5.7               Zstandard - Fast real-time compression algorithm
