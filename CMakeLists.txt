@@ -77,54 +77,6 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}   ${OpenMP_C_FLAGS}")
 find_package(Eigen3 REQUIRED)
 message(Eigen: ${EIGEN3_INCLUDE_DIR})
 
-add_executable(fastlio_qt main.cpp
-        Msgs/dataTypes.h
-        messageReceiver.cpp
-        messageReceiver.h
-        SLAM/FastLio/MainWorker.cpp
-        SLAM/FastLio/MainWorker.h
-        SLAM/FastLio/Preprocess.cpp
-        SLAM/FastLio/Preprocess.h
-        SLAM/FastLio/ImuProcess.cpp
-        SLAM/FastLio/ImuProcess.h
-        IKFoM_toolkit/ikfomDataTypes.h
-        ikd-Tree/ikd_Tree.cpp
-        ikd-Tree/ikd_Tree.h
-        tools/Exp_Math.h
-        Display.cpp
-        Display.h
-#        widget3d/EzQVTKInteractor.cxx widget3d/EzQVTKInteractor.h
-#        widget3d/EzQVTKInteractorAdapter.cxx widget3d/EzQVTKInteractorAdapter.h
-#        widget3d/EzQVTKOpenGLNativeWidget.cxx widget3d/EzQVTKOpenGLNativeWidget.h
-#        widget3d/EzQVTKRenderWindowAdapter.cxx widget3d/EzQVTKRenderWindowAdapter.h
-#        widget3d/EzQVTKInteractorInternal.h
-        mainwindow.ui
-        SLAM/SLAMBase.cpp
-        SLAM/SLAMBase.h
-        Sensors/SensorType.h
-        tools/utills.h
-        Sensors/SensorBase.h
-        SLAM/AlgorithmMainBase.h
-#        SLAM/FastLio/FastLioMain.cpp
-#        SLAM/FastLio/FastLioMain.h
-        SLAM/FastLio/FastlioConfig.h
-
-
-)
-target_link_libraries(fastlio_qt PRIVATE libzmq libzmq-static)
-target_link_libraries(fastlio_qt PRIVATE nlohmann_json::nlohmann_json)
-target_link_libraries(fastlio_qt PRIVATE Qt::Core Qt::Widgets)
-target_link_libraries(fastlio_qt PRIVATE ${PCL_LIBRARIES} ${VTK_LIBRARIES})
-
-# vtk_module_autoinit is needed
-vtk_module_autoinit(
-        TARGETS fastlio_qt
-        MODULES ${VTK_LIBRARIES}
-)
-
-
-
-
 #find_package(Ceres CONFIG REQUIRED)
 #target_link_libraries(main PRIVATE Ceres::ceres)
 

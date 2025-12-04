@@ -71,7 +71,11 @@ public slots:
     }
     void onTimeout() {
         // std::cout << this->metaObject()->className() << " 运行中..." << std::endl;
+        auto start_time = std::chrono::high_resolution_clock::now();
         loop();  // ✅ 运行时调用子类实现，无纯虚函数取址风险
+        auto end_time = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> elapsed = end_time - start_time;
+        std::cout << "AlgorithmMainBase 运行时间：" << elapsed.count()*1000 << " ms" << std::endl;
     }
 
 protected:

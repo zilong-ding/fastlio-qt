@@ -14,7 +14,7 @@
 class SLAMBase : public QObject{
     Q_OBJECT
 public:
-    explicit SLAMBase(bool use_multi_thread =  true,QObject* parent =  nullptr) : QObject(parent)
+    explicit SLAMBase(bool use_multi_thread =  true) : QObject()
     {
         _use_multi_thread = use_multi_thread;
         if (_use_multi_thread) {
@@ -28,6 +28,15 @@ public:
     }
     ~SLAMBase() {
         std::cout << "SLAMBase destructor" << std::endl;
+        stop();
+        if (_use_multi_thread) {
+            imu_thread->quit();
+            imu_thread->wait();
+            lidar_thread->quit();
+            lidar_thread->wait();
+            camera_thread->quit();
+            camera_thread->wait();
+        }
 
     }
     void addIMUinstance(std::shared_ptr<ImuBase> imu) {
@@ -37,6 +46,7 @@ public:
             imu_thread->start();
         }
         auto res = connect(this, &SLAMBase::startImu, _imu.get(), &ImuBase::start);
+        res = connect(this, &SLAMBase::stopImu, _imu.get(), &ImuBase::stop);
         // emit startImu(1);
         std::cout << "connect imu to main worker " << res << std::endl;
     }
@@ -47,12 +57,21 @@ public:
             lidar_thread->start();
         }
         auto res = connect(this, &SLAMBase::startLidar, _lidar.get(), &LidarBase::start);
+        res = connect(this, &SLAMBase::stopLidar, _lidar.get(), &LidarBase::stop);
         std::cout << "connect lidar to main worker " << res << std::endl;
     }
     void addAlgorithmInstance(std::shared_ptr<AlgorithmMainBase>  algorithm) {
         main_worker_instance = std::move(algorithm);
-        auto res = connect(main_worker_instance.get(), &AlgorithmMainBase::publishOdom, this, &SLAMBase::getOdometry);
-        std::cout << "connect main worker to odom " << res << std::endl;
+        // 🔗 连接 AlgorithmMainBase 的信号 → SLAMBase 的槽 → 再 emit 自身信号
+        auto res1 = connect(main_worker_instance.get(), &AlgorithmMainBase::publishOdom,
+                            this, &SLAMBase::getOdometry);
+        auto res2 = connect(main_worker_instance.get(), &AlgorithmMainBase::PathPublish,
+                            this, &SLAMBase::onPathPublish);
+        auto res3 = connect(main_worker_instance.get(), &AlgorithmMainBase::PointCloudPublish,
+                            this, &SLAMBase::onPointCloudPublish);
+
+        std::cout << "connect main worker signals: odom=" << res1
+                  << ", path=" << res2 << ", cloud=" << res3 << std::endl;
     }
 
     void addCameraInstance(std::shared_ptr<CameraBase> camera) {
@@ -62,6 +81,7 @@ public:
             camera_thread->start();
         }
         auto res = connect(this, &SLAMBase::startCamera, _camera.get(), &CameraBase::start);
+        res = connect(this, &SLAMBase::stopCamera, _camera.get(), &CameraBase::stop);
         std::cout << "connect camera to main worker " << res << std::endl;
     }
     bool connectSlots() {
@@ -73,7 +93,7 @@ public:
     }
     bool start() {
         bool res = false;
-        res = main_worker_instance->start();
+        res = main_worker_instance->start(10);
         std::cout << "main worker start " << res << std::endl;
         if (_imu)
         {
@@ -81,7 +101,7 @@ public:
         }
         if (_lidar)
         {
-            emit startLidar(1);
+            emit startLidar(10);
         }
         if (_camera) {
             emit startCamera(1);
@@ -94,43 +114,42 @@ public:
         // res = main_worker_instance->setStop();
         if (_imu)
         {
-            if (imu_thread) {
-                QMetaObject::invokeMethod(_imu.get(), "stop", Qt::QueuedConnection, Q_RETURN_ARG(bool, res));
-            }
-            else {
-                _imu->stop();
-            }
+            emit stopImu();
         }
         if (_lidar)
         {
-            if (lidar_thread) {
-                QMetaObject::invokeMethod(_lidar.get(), "stop", Qt::QueuedConnection, Q_RETURN_ARG(bool, res));
-            }
-            else {
-                _lidar->stop();
-            }
+            emit stopLidar();
         }
         if (_camera) {
-            if (camera_thread) {
-                QMetaObject::invokeMethod(_camera.get(), "stop", Qt::QueuedConnection, Q_RETURN_ARG(bool, res));
-            }
-            else {
-                _camera->stop();
-            }
+            emit stopCamera();
         }
         return res;
     }
 
 public slots:
-    void getOdometry( Odometry odom) {
-        auto pose = odom.pose.pose;
-        std::cout << "odom: " << pose.position.x << " " << pose.position.y << " " << pose.position.z << std::endl;
+    void getOdometry(Odometry odom) {
+        emit odomUpdated(odom);  // ✅ 转发给 GUI
+    }
+
+    void onPathPublish(const Path& p) {
+        emit pathUpdated(p);
+    }         // 新增
+    void onPointCloudPublish(const PointCloudMsg& p) {
+        emit pointCloudUpdated(p);
     }
 
 signals:
     void startImu(int intervalMs);
     void startLidar(int intervalMs);
     void startCamera(int intervalMs);
+    void stopImu();
+    void stopLidar();
+    void stopCamera();
+
+    void odomUpdated(const Odometry& odom);        // 位姿
+    void pathUpdated(const Path& path);             // 轨迹
+    void pointCloudUpdated(const PointCloudMsg& cloud); // 点云
+
 
 private:
     std::shared_ptr<ImuBase> _imu =  nullptr;

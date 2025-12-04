@@ -726,9 +726,7 @@ inline bool Pointcloud2ToPCL(const PointCloud2::ConstPtr& cloud, PointCloudXYZI:
         // dst.normal_x = 0.0f;
         // dst.normal_y = 0.0f;
         dst.normal_z = 0.0f;
-
     }
-
     return true;
 }
 

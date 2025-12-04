@@ -28,11 +28,12 @@ public:
     // 纯虚函数：强制子类实现采样/处理逻辑
     virtual void loop() = 0;
 
-    Q_INVOKABLE void stop() {
-        timer->stop();
-    }
+
 
 public slots:
+    void stop() {
+        timer->stop();
+    }
 
     void start(int intervalMs = 10) {
         qDebug() << "[SensorBase::start] ENTER"
@@ -47,9 +48,11 @@ public slots:
     }
 
     void onTimeout() {
-        // qDebug() << "[SensorBase::onTimeout]" << metaObject()->className()
-        //      << "running in thread" << QThread::currentThreadId();
+        auto start_time = std::chrono::high_resolution_clock::now();
         loop();  // ✅ 运行时调用子类实现，无纯虚函数取址风险
+        auto end_time = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> elapsed = end_time - start_time;
+        std::cout << metaObject()->className() << " 运行时间：" << elapsed.count()*1000 << " ms" << std::endl;
     }
 
 protected:
