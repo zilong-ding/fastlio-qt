@@ -26,7 +26,7 @@ public:
     ~SensorBase() override = default;
 
     // 纯虚函数：强制子类实现采样/处理逻辑
-    Q_INVOKABLE virtual void loop() = 0;
+    virtual void loop() = 0;
 
     Q_INVOKABLE void stop() {
         timer->stop();
@@ -47,8 +47,8 @@ public slots:
     }
 
     void onTimeout() {
-        qDebug() << "[SensorBase::onTimeout]" << metaObject()->className()
-             << "running in thread" << QThread::currentThreadId();
+        // qDebug() << "[SensorBase::onTimeout]" << metaObject()->className()
+        //      << "running in thread" << QThread::currentThreadId();
         loop();  // ✅ 运行时调用子类实现，无纯虚函数取址风险
     }
 

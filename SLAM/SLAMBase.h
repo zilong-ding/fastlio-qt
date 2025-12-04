@@ -32,14 +32,20 @@ public:
     }
     void addIMUinstance(std::shared_ptr<ImuBase> imu) {
         _imu = std::move(imu);
-        if (_use_multi_thread) _imu->moveToThread(imu_thread.get());
+        if (_use_multi_thread) {
+            _imu->moveToThread(imu_thread.get());
+            imu_thread->start();
+        }
         auto res = connect(this, &SLAMBase::startImu, _imu.get(), &ImuBase::start);
-        emit startImu(1);
+        // emit startImu(1);
         std::cout << "connect imu to main worker " << res << std::endl;
     }
     void addLidarInstance(std::shared_ptr<LidarBase> lidar) {
         _lidar = std::move(lidar);
-        if (_use_multi_thread) _lidar->moveToThread(lidar_thread.get());
+        if (_use_multi_thread) {
+            _lidar->moveToThread(lidar_thread.get());
+            lidar_thread->start();
+        }
         auto res = connect(this, &SLAMBase::startLidar, _lidar.get(), &LidarBase::start);
         std::cout << "connect lidar to main worker " << res << std::endl;
     }
@@ -51,7 +57,10 @@ public:
 
     void addCameraInstance(std::shared_ptr<CameraBase> camera) {
         _camera = std::move(camera);
-        if (_use_multi_thread) _camera->moveToThread(camera_thread.get());
+        if (_use_multi_thread) {
+            _camera->moveToThread(camera_thread.get());
+            camera_thread->start();
+        }
         auto res = connect(this, &SLAMBase::startCamera, _camera.get(), &CameraBase::start);
         std::cout << "connect camera to main worker " << res << std::endl;
     }

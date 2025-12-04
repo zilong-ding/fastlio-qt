@@ -32,18 +32,21 @@ public slots:
             // Parse JSON
             auto j = json::parse(payload);
             // 🔍 Topic discrimination via top-level keys
-            if (j.contains("orientation") && j.contains("angular_velocity")) {
+            if (j.contains("orientation") && j.contains("angular_velocity"))
+            {
                 auto imuPtr = std::make_shared<IMU>();
                 try {
                     j.get_to(*imuPtr);
-                } catch (const json::exception& e) {
+                }
+                catch (const json::exception& e)
+                {
                     std::cerr << "[JSON] IMU parse fail: " << e.what() << "\n";
                     return;
                 }
                 emit sendIMUData(imuPtr);  // 安全：imuPtr 独占数据
             }
             else {
-                std::cerr << "[?] Unknown message type\n";
+                // std::cerr << "[?] Unknown message type\n";
             }
         }
         catch (const std::exception& e) {
@@ -67,9 +70,9 @@ public:
     ~LidarReceiver() override {
         sock.close();
     }
-public slots:
+
     void loop() override {
-        std::cout << "LidarReceiver, waiting for messages..." << std::endl;
+        // std::cout << "LidarReceiver, waiting for messages..." << std::endl;
         zmq::message_t msg;
         try {
                 if (!sock.recv(msg, zmq::recv_flags::none)) {
@@ -92,14 +95,14 @@ public slots:
                     emit sendLidarData(data);
                 }
                 else {
-                    std::cerr << "[?] Unknown message type\n";
+                    // std::cerr << "[?] Unknown message type\n";
                 }
             }
         catch (const std::exception& e) {
             std::cerr << "Error: " << e.what() << "\n";
         }
     }
-
+public slots:
 private:
     zmq::context_t ctx;
     zmq::socket_t sock;
