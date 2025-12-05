@@ -1,157 +1,199 @@
-# SLAM-TOOLBOX-QT
-## 安装
+# 🧭 SLAM-TOOLBOX-QT
+> **A real-time Qt-based SLAM visualization & processing framework with ZeroMQ streaming, Fast-LIO2 backend, and ROS interoperability.**
 
-## 运行
 ![2025-11-28_09-11.jpg](docs/2025-11-28_09-11.jpg)
-1. 启动python端读取rosbag并发送数据
+
+---
+
+## ✅ 特性亮点
+
+- ✅ **模块化传感器架构**：支持任意自定义传感器（IMU / LiDAR / GNSS / …）通过继承 `ImuBase` / `LidarBase`
+- ✅ **零拷贝数据流**：基于 **ZeroMQ IPC**（进程间通信）实现 Python ↔ C++ 高吞吐、低延迟数据管道
+- ✅ **Fast-LIO2 后端**：紧耦合 LiDAR-IMU 前端 + EKF 后端，支持 `.json` 动态配置
+- ✅ **PCL + VTK 可视化**：3D 点云、轨迹、体素栅格实时渲染
+- ✅ **vcpkg 全依赖管理**：开箱即用的依赖列表（[vcpkg_dependencies.txt](vcpkg_dependencies.txt)）
+
+---
+
+## 📦 依赖安装（vcpkg）
+
+本项目**推荐使用 vcpkg + 动态链接 triplet `x64-linux-dynamic`**（因 QtMultimedia/VTK/PCL 可视化依赖插件系统）
+
+### 1️⃣ 一键安装全部依赖
+
 ```bash
-python exampls/ros/RosBagReader.py 
+# 确保 vcpkg 已初始化（若未 bootstrap，会自动完成）
+/path/to/vcpkg install @vcpkg_dependencies.txt
 ```
-2. 启动qt程序
+
+> 💡 `vcpkg_dependencies.txt` 中已包含全部所需库及特性（Qt6.9.1 + OpenCV4 + VTK9.3 + PCL1.15 + ZeroMQ + nlohmann_json + Eigen3 + FFmpeg + GStreamer + ALSA + PulseAudio 等）
+
+### 2️⃣ 手动安装（推荐校验）
+
+```bash
+vcpkg install \
+    qtbase[gui,widgets,network,sql,sql-sqlite,sql-psql,dbus,opengl,xcb,xkbcommon-x11,freetype,fontconfig,harfbuzz,openssl,doubleconversion,jpeg,png,zstd]:x64-linux-dynamic \
+    qtmultimedia[gstreamer,widgets]:x64-linux-dynamic \
+    qttools[linguist]:x64-linux-dynamic \
+    opencv4[gtk,jpeg,png,tiff,webp,calib3d,highgui]:x64-linux-dynamic \
+    vtk[qt,opengl,proj,cgns,netcdf]:x64-linux-dynamic \
+    pcl[qt,visualization]:x64-linux-dynamic \
+    zeromq:x64-linux-dynamic \
+    nlohmann-json:x64-linux-dynamic \
+    eigen3:x64-linux-dynamic \
+    ffmpeg[avcodec,avformat,swscale,swresample]:x64-linux-dynamic \
+    gstreamer[plugins-base,plugins-bad]:x64-linux-dynamic \
+    alsa:x64-linux-dynamic \
+    pulseaudio:x64-linux-dynamic
+```
+
+---
+
+## 🛠 编译构建（推荐校验）
+
+```bash
+mkdir build && cd build
+cmake .. \
+  -DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake \
+  -DVCPKG_TARGET_TRIPLET=x64-linux-dynamic \
+  -DCMAKE_BUILD_TYPE=Release
+cmake --build . -j$(nproc)
+```
+
+> ⚠️ **务必启用 `vcpkg.cmake` 工具链**，否则 CMake 无法找到 vcpkg 安装的库。
+
+---
+
+## ▶️ 运行示例
+
+### 1️⃣ 启动 Python 数据源（模拟 ROS bag 播放）
+
+```bash
+# 播放 bag 并通过 ZeroMQ 发布 IMU + LiDAR
+python examples/ros/RosBagReader.py
+```
+
+> 📝 `RosBagReader.py` 会创建两个 IPC 套接字：
+> - `ipc:///tmp/imu_stream`
+> - `ipc:///tmp/lidar_stream`
+
+### 2️⃣ 启动 Qt 主程序
+
 ```bash
 ./fastlio_example
 ```
 
-## 代码使用
-1. 自定义传感器类型
-```C++
-class IMUReceiver:public ImuBase {
+程序将：
+- 连接 ZeroMQ 流
+- 加载 `examples/fastlio.json` 配置
+- 启动 Fast-LIO2 算法线程
+- 启动 Qt 主循环 + PCL/VTK 渲染窗口
+
+---
+
+## 🧩 二次开发指南
+
+### 📌 1. 添加自定义传感器
+
+```cpp
+class CustomGNSSReceiver : public SensorBase {
     Q_OBJECT
 public:
-    explicit IMUReceiver (QObject* parent = nullptr):ImuBase(parent) {
-        sock = zmq::socket_t(ctx, ZMQ_SUB);
-        sock.set(zmq::sockopt::subscribe, ""); // Subscribe to all messages
-        sock.connect("ipc:///tmp/imu_stream");
-
-        // sock.setsockopt(zmq::recv_flags::dontwait, 10) ;
-
-        std::cout << "IMUReceiver started, waiting for messages..." << std::endl;
+    explicit CustomGNSSReceiver(QObject* parent = nullptr) : SensorBase(parent) {
+        // 初始化 ZMQ / TCP / Serial 等
     }
-    ~IMUReceiver() {
-        sock.close();
-    }
+
 public slots:
-    void loop() override{
-        zmq::message_t msg;
-        try {
-            // if (!sock.recv(msg, zmq::recv_flags::none)) {
-            //     return;
-            // }
-            sock.recv(msg, zmq::recv_flags::none);
-            std::string payload(static_cast<char*>(msg.data()), msg.size());
-            // Parse JSON
-            auto j = json::parse(payload);
-            // 🔍 Topic discrimination via top-level keys
-            if (j.contains("orientation") && j.contains("angular_velocity"))
-            {
-                auto imuPtr = std::make_shared<IMU>();
-                try {
-                    j.get_to(*imuPtr);
-                }
-                catch (const json::exception& e)
-                {
-                    std::cerr << "[JSON] IMU parse fail: " << e.what() << "\n";
-                    return;
-                }
-                emit sendIMUData(imuPtr);  // 安全：imuPtr 独占数据
-            }
-            else {
-                // std::cerr << "[?] Unknown message type\n";
-            }
-        }
-        catch (const std::exception& e) {
-            std::cerr << "Error: " << e.what() << "\n";
-        }
-    }
-private:
-    zmq::context_t ctx;
-    zmq::socket_t sock;
-};
-
-class LidarReceiver:public LidarBase {
-    Q_OBJECT
-public:
-    explicit LidarReceiver(QObject* parent = nullptr):LidarBase(parent) {
-        sock = zmq::socket_t(ctx, ZMQ_SUB);
-        sock.set(zmq::sockopt::subscribe, ""); // Subscribe to all messages
-        sock.connect("ipc:///tmp/lidar_stream");
-        std::cout << "LidarReceiver started, waiting for messages..." << std::endl;
-    }
-    ~LidarReceiver() override {
-        sock.close();
-    }
-
     void loop() override {
-        // std::cout << "LidarReceiver, waiting for messages..." << std::endl;
-        zmq::message_t msg;
-        try {
-                // if (!sock.recv(msg, zmq::recv_flags::none)) {
-                //     return;
-                // }
-                sock.recv(msg, zmq::recv_flags::none);
-                std::string payload(static_cast<char*>(msg.data()), msg.size());
-                // Parse JSON
-                auto j = json::parse(payload);
-                // 🔍 Topic discrimination via top-level keys
-                if (j.contains("points") && j.contains("timebase")) {
-                    auto framePtr = std::make_shared<LidarFrame>();
-                    try {
-                        j.get_to(*framePtr);
-                    } catch (const json::exception& e) {
-                        std::cerr << "[JSON] Lidar parse fail: " << e.what() << "\n";
-                        return;
-                    }
-                    PointCloud2::Ptr data = std::make_shared<PointCloud2>();
-                    LidarFrame2Pointcloud2(framePtr,data);
-                    emit sendLidarData(data);
-                }
-                else {
-                    // std::cerr << "[?] Unknown message type\n";
-                }
-            }
-        catch (const std::exception& e) {
-            std::cerr << "Error: " << e.what() << "\n";
-        }
+        // 1. 读取原始数据
+        // 2. 解析为 std::shared_ptr<GNSS>
+        // 3. emit sendGNSSData(gnssPtr);
     }
-public slots:
-private:
-    zmq::context_t ctx;
-    zmq::socket_t sock;
 };
 ```
-这里是利用zmq进行数据传递的，重点是loop函数,内部实现获取一帧数据并发送的逻辑
 
-2. 设置fastlio参数
-详情请看[fastlio.json](examples/fastlio.json)
-3. 主程序设置
-```c++
-int main(int argc, char *argv[]) {
-    QApplication app(argc, argv);
-    MainWorkerConfig cfg;
-    std::ifstream f("/home/dzl/CLionProjects/fastlio-qt/examples/fastlio.json");
-    nlohmann::json j;
-    f >> j;
-    cfg = j.get<MainWorkerConfig>(); // 自动调用 from_json
-    auto imu = std::make_shared<IMUReceiver>();
-    auto lidar = std::make_shared<LidarReceiver>();
-    auto fastlio = std::make_shared<FastLioMain>();
-    fastlio->initParams(cfg);
-    auto slam = std::make_shared<SLAMBase>();
-    slam->addAlgorithmInstance(fastlio);
-    slam->addIMUinstance(imu);
-    slam->addLidarInstance(lidar);
-    auto res = slam->connectSlots();
-     res &= slam->start();
-    if (!res) {
-        std::cout << "start failed" << std::endl;
-        return -1;
-    }
-    std::cout << "hello fastlio_example" << std::endl;
-    return app.exec();
+> ✅ 所有传感器只需实现 `loop()` 槽函数，框架自动以 ** QTimer 驱动轮询**（默认 1ms 间隔，可配置）
+
+### 📌 2. 修改 Fast-LIO 参数
+
+编辑 [`examples/fastlio.json`](examples/fastlio.json)，支持字段包括：
+```json
+{
+  "lidar_type": 0,
+  "N_SCANS": 6,
+  "point_filter_num": 3,
+  "blind": 4.0,
+  "time_unit": 0,
+  "SCAN_RATE": 10,
+
+  "NUM_MAX_ITERATIONS": 4,
+  "extrinsic_est_en": true,
+
+  "extrinsic_T": [0.04165, 0.02326, -0.0284],
+  "extrinsic_R": [
+    [1.0, 0.0, 0.0],
+    [0.0, 1.0, 0.0],
+    [0.0, 0.0, 1.0]
+  ],
+
+  "runtime_pos_log": false
 }
 ```
 
+### 📌 3. 替换/扩展 SLAM 后端
 
+```cpp
+auto myCeresLIO = std::make_shared<CeresLioMain>();  // 自定义类
+myCeresLIO->initParams(cfg);
 
+slam->addAlgorithmInstance(myCeresLIO);  // 替换 FastLioMain
+```
 
+> 框架支持多算法并行（调试比对），只需派生 `AlgorithmMainBase` 并实现 对应传感器callback和loop函数。
 
+---
+
+## 📂 项目结构
+
+```
+├── CMakeLists.txt                # 主构建脚本（目标：examples/fastlio_example）
+├── docs/                         # 截图/文档
+├── examples/
+│   ├── fastlio_example.cpp       # 主程序入口（含 main()）
+│   ├── fastlio.json              # Fast-LIO 参数配置
+│   └── mainwindow.ui             # Qt Designer 界面文件 ✅
+│   └── ros/                      # ROSbag 工具链
+├── ikd-Tree/                     # Incremental KD-Tree (Fast-LIO 核心)
+├── IKFoM_toolkit/                # Error-State EKF on Manifold
+├── Msgs/dataTypes.h              # 自定义消息结构（IMU/LidarFrame 等）
+├── Sensors/
+│   ├── SensorBase.h              # 传感器基类（含虚函数 loop()）
+│   └── SensorType.h              # 消息类型定义（IMU / LidarFrame）
+├── SLAM/                         # 核心调度层
+│   ├── SLAMBase.{h,cpp}          # 传感器/算法注册、信号连接中枢
+│   ├── AlgorithmMainBase.h       # SLAM 算法抽象接口
+│   └── FastLio/                  # Fast-LIO2 具体实现
+└── tools/
+    ├── Exp_Math.h                # 数学工具（SO3/SE3 等）
+    └── utills.h                  # JSON ↔ 结构体转换、点云处理
+```
+
+---
+
+## 📜 License
+
+MIT License — See [LICENSE](LICENSE)
+
+---
+
+## 🙏 致谢
+
+- [Fast-LIO2](https://github.com/hku-mars/FAST_LIO) — HKU-Mars
+- [ikd-Tree](https://github.com/hku-mars/ikd-Tree) — Incremental KD-Tree
+- [Qt](https://www.qt.io/) — GUI & Threading
+- [PCL](https://pointclouds.org/) / [VTK](https://vtk.org/) — 3D Visualization
+- [ZeroMQ](https://zeromq.org/) — High-performance messaging
+
+---
+
+> 🌟 欢迎 PR / Issue！
