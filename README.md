@@ -1,5 +1,5 @@
 # 🧭 SLAM-TOOLBOX-QT
-> **A real-time Qt-based SLAM visualization & processing framework with ZeroMQ streaming, Fast-LIO2 backend, and ROS interoperability.**
+> **SLAM-TOOLBOX-QT 是一个高性能、模块化、跨平台的 SLAM（Simultaneous Localization and Mapping）系统集成框架，旨在将前沿的 激光雷达-惯性紧耦合算法（如 Fast-LIO2） 与 直观的 Qt 图形用户界面 无缝融合，为机器人开发者、研究人员与工程师提供一个开箱即用的实时建图、定位与可视化平台。**
 
 ![2025-11-28_09-11.jpg](docs/2025-11-28_09-11.jpg)
 
@@ -14,6 +14,42 @@
 - ✅ **vcpkg 全依赖管理**：开箱即用的依赖列表（[vcpkg_dependencies.txt](vcpkg_dependencies.txt)）
 
 ---
+
+## 🔧 核心架构设计
+本项目采用 分层解耦 + 多线程异步通信 的现代软件架构：
+
+### 业务逻辑层（SLAMBase）
+纯 QObject 调度中枢，无任何 GUI 依赖 
+
+统一管理 IMU、LiDAR、Camera 等多源传感器实例 
+
+支持单线程调试模式与多线程高性能模式（各传感器独立线程） 
+
+通过 Qt 信号槽机制实现模块间零拷贝、跨线程安全通信
+### 算法接口层（AlgorithmMainBase）
+定义标准 SLAM 算法抽象接口
+
+输出三类核心数据流：
+> Odometry：高频率位姿估计（6-DoF）
+> 
+> Path：全局轨迹（用于回环校正后优化）
+> 
+> PointCloudMsg：稠密/稀疏点云地图
+
+### 可视化交互层（SLAM GUI）
+基于 QMainWindow 构建响应式界面
+
+集成 VTK + PCLVisualizer 实现 3D 实时渲染：
+
+动态点云更新
+
+机器人位姿坐标系跟踪
+
+轨迹可视化
+
+网格地面与世界坐标系辅助
+
+
 
 ## 📦 依赖安装（vcpkg）
 
