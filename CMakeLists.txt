@@ -16,7 +16,7 @@ ENDIF ()
 #set(CMAKE_INSTALL_RPATH "/home/dzl/Qt/6.9.1/gcc_64/lib")
 #set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 #set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Widgets LinguistTools Thread)
+#find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Widgets LinguistTools Thread)
 find_package(Qt6 REQUIRED COMPONENTS Widgets LinguistTools Multimedia MultimediaWidgets Core Gui)
 if(Qt6_FOUND)
     message(STATUS "Qt install path: ${Qt6_DIR}")
@@ -86,6 +86,18 @@ message(Eigen: ${EIGEN3_INCLUDE_DIR})
 #find_package(g2o CONFIG REQUIRED)
 #target_link_libraries(main PRIVATE g2o::core g2o::stuff g2o::types_icp g2o::types_sba)
 
+#find_package(SymEngine CONFIG REQUIRED)
+#target_link_libraries(main PRIVATE symengine)
+
+#find_package(fcl CONFIG REQUIRED)
+#target_link_libraries(main PRIVATE fcl)
+
+#find_package(ompl CONFIG REQUIRED)
+#target_link_libraries(main PRIVATE ompl::ompl flann::flann)
+
+find_package(httplib CONFIG REQUIRED)
+
+
 add_executable(fastlio_example
         examples/fastlio_example.cpp
         SLAM/FastLio/Preprocess.cpp
@@ -105,13 +117,14 @@ add_executable(fastlio_example
         SLAM/FastLio/FastLioMain.cpp
         SLAM/FastLio/FastLioMain.h
         SLAM/FastLio/FastlioConfig.h
+        http/httpserver.h
 
 )
 target_link_libraries(fastlio_example PRIVATE libzmq libzmq-static)
 target_link_libraries(fastlio_example PRIVATE nlohmann_json::nlohmann_json)
 target_link_libraries(fastlio_example PRIVATE Qt::Core Qt::Widgets)
 target_link_libraries(fastlio_example PRIVATE ${PCL_LIBRARIES} ${VTK_LIBRARIES})
-
+target_link_libraries(fastlio_example PRIVATE httplib::httplib)
 # vtk_module_autoinit is needed
 vtk_module_autoinit(
         TARGETS fastlio_example

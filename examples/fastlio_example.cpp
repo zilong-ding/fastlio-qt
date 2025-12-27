@@ -6,6 +6,7 @@
 #include "../SLAM/FastLio/FastLioMain.h"
 #include "../SLAM/FastLio/FastlioConfig.h"
 #include "../SLAM/SLAMBase.h"
+#include "../http/httpserver.h"
 #include <zmq.hpp>
 #include <QObject>
 #include <QApplication>
@@ -164,6 +165,12 @@ public:
         vtkWidget->update();
         viewer->addCoordinateSystem(10,"world");
         lastPoint = pcl::PointXYZ(0.0,0.0,0.0);
+
+
+        http_server = std::make_shared<HttpServer>();
+        server_thread = std::make_shared<QThread>();
+        http_server->moveToThread(server_thread.get());
+        server_thread->start();
     }
     ~SLAMDisplay() override {
         slam_base->stop();
@@ -173,7 +180,10 @@ public:
         connect(slam_base.get(), &SLAMBase::odomUpdated, this, &SLAMDisplay::updateOdometry);
         connect(slam_base.get(), &SLAMBase::pathUpdated, this, &SLAMDisplay::updatePath);
         connect(slam_base.get(), &SLAMBase::pointCloudUpdated, this, &SLAMDisplay::updatePointcloud);
+        connect(slambase.get(),&SLAMBase::odomUpdated,http_server.get(),&HttpServer::updateOdom);
+        connect(this,&SLAMDisplay::startHttp,http_server.get(),&HttpServer::start);
         slam_base->start();
+        emit startHttp();
     }
     void updateviewer() {
         // viewer->spinOnce(50);
@@ -181,6 +191,10 @@ public:
         renderWindow->Render();
         vtkWidget->update();
     }
+
+    signals:
+    void startHttp();
+
 public slots:
     void updateOdometry(const Odometry& odom);
     void updatePath(const Path& path);
@@ -194,10 +208,12 @@ private:
     vtkNew<vtkRenderer> renderer ;
     vtkNew<vtkGenericOpenGLRenderWindow> renderWindow ;
     std::shared_ptr<SLAMBase> slam_base;
+    std::shared_ptr<HttpServer> http_server;
+    std::shared_ptr<QThread> server_thread;
 };
 
 void SLAMDisplay::updateOdometry(const Odometry& odom) {
-    // std::cout << "updateOdometry" << std::endl;
+    std::cout << "updateOdometry" << std::endl;
     // 1. 提取 position 和 orientation
     auto &pose = odom.pose.pose;
     auto &position = pose.position;

@@ -189,6 +189,11 @@ struct TwistWithCovariance {
     # (x, y, z, rotation about X axis, rotation about Y axis, rotation about Z axis)
 */
     std::vector<double> covariance = std::vector<double>(36,0.0); // len=36
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(
+    TwistWithCovariance,
+    twist,
+    covariance
+    )
 };
 
 struct IMU {
@@ -304,6 +309,7 @@ struct Odometry {
     TwistWithCovariance twist;
     NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(
         Odometry,
+        header,
         child_frame_id,
         pose,
         twist
