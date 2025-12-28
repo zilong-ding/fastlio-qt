@@ -18,8 +18,14 @@ int main() {
     std::cout << "hello pcl plane" << std::endl;
     // 1. 读取点云
     PointCloudT::Ptr cloud(new PointCloudT);
-    if (pcl::io::loadPCDFile<PointT>("/home/dzl/PycharmProjects/coppeliasim/coppeliasim/test/01f.pcd", *cloud) == -1)
-    {
+    std::string path0 = "/home/dzl/PycharmProjects/coppeliasim/coppeliasim/test/01f.pcd";
+    std::string path1 = "/home/dzl/CLionProjects/fastlio-qt/segmentation/pointcloud_hdl64e2.ply";
+    // if (pcl::io::loadPCDFile<PointT>(path0, *cloud) == -1)
+    // {
+    //     PCL_ERROR("Could not read file.\n");
+    //     return -1;
+    // }
+    if (pcl::io::loadPLYFile<PointT>(path1, *cloud) == -1) {
         PCL_ERROR("Could not read file.\n");
         return -1;
     }
@@ -71,9 +77,11 @@ int main() {
         extract.filter(*plane_cloud);
 
         float nz = std::abs(coefficients->values[2]); // 法向 z 分量
+        float nx = std::abs(coefficients->values[0]);
         auto threshold = std::sin(pcl::deg2rad(20.0f));
+        auto threshold_x = std::sin(pcl::deg2rad(50.0f));
         std:: cout << "nz " << nz << " threshold " << threshold << std::endl;
-        if (nz < threshold) {
+        if (nz < threshold && nx < threshold_x) {
             planes.push_back(plane_cloud);
             coefficients_list.push_back(*coefficients);
             std::cout << "Plane " << i << ": "
