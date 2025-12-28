@@ -11,6 +11,8 @@
 #include <pcl/filters/extract_indices.h>
 #include <pcl/segmentation/sac_segmentation.h>
 #include <pcl/console/time.h>
+#include <CGAL/optimal_bounding_box.h>
+#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 // #include <pcl/segmentation/>
 typedef pcl::PointXYZ PointT;
 typedef pcl::PointCloud<PointT> PointCloudT;
@@ -111,7 +113,9 @@ int main() {
     PointCloudT::Ptr cloud_filtered = std::make_shared<PointCloudT>(*cloud);
     std::vector<PointCloudT::Ptr> planes = extractPlanes(cloud_filtered);
 
-
+    typedef CGAL::Exact_predicates_inexact_constructions_kernel    K;
+    typedef K::Point_3                                             Point;
+    std::vector<Point> points;
 
     // 3. 可选：保存每个平面为单独 ply 文件
     for (size_t i = 0; i < planes.size(); ++i)
@@ -120,7 +124,24 @@ int main() {
         // pcl::io::savePCDFileBinary(filename, *planes[i]);
         pcl::io::savePLYFile(filename, *planes[i]);
         std::cout << "Saved " << filename << std::endl;
+        for (auto& p : planes[i]->points) {
+            points.emplace_back(p.x, p.y, p.z);
+        }
     }
+    std::array<Point, 8> obb_points;
+    CGAL::oriented_bounding_box(points, obb_points);
+    std::cout <<
+        "point[0] " << obb_points[0] << "\n" <<
+        "point[1] " << obb_points[1] << "\n" <<
+        "point[2] " << obb_points[2] << "\n" <<
+        "point[3] " << obb_points[3] << "\n" <<
+        "point[4] " << obb_points[4] << "\n" <<
+        "point[5] " << obb_points[5] << "\n" <<
+        "point[6] " << obb_points[6] << "\n" <<
+        "point[7] " << obb_points[7] << "\n" <<
+     std::endl;
+
+    // auto obb = CGAL::optimal_bounding_box(points);
 
 
 

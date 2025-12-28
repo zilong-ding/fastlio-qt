@@ -95,6 +95,10 @@ message(Eigen: ${EIGEN3_INCLUDE_DIR})
 #find_package(ompl CONFIG REQUIRED)
 #target_link_libraries(main PRIVATE ompl::ompl flann::flann)
 
+find_package(CGAL CONFIG REQUIRED)
+
+
+
 find_package(httplib CONFIG REQUIRED)
 
 
@@ -133,3 +137,4 @@ vtk_module_autoinit(
 )
 add_executable(pclSegmentationPlane_test segmentation/pclSegmentationPlane_test.cpp)
 target_link_libraries(pclSegmentationPlane_test PRIVATE ${PCL_LIBRARIES} ${VTK_LIBRARIES})
+target_link_libraries(pclSegmentationPlane_test PRIVATE CGAL::CGAL)
