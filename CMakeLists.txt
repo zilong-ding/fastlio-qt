@@ -118,6 +118,7 @@ add_executable(fastlio_example
         SLAM/FastLio/FastLioMain.h
         SLAM/FastLio/FastlioConfig.h
         http/httpserver.h
+        segmentation/pclSegmentation.h
 
 )
 target_link_libraries(fastlio_example PRIVATE libzmq libzmq-static)
@@ -130,3 +131,5 @@ vtk_module_autoinit(
         TARGETS fastlio_example
         MODULES ${VTK_LIBRARIES}
 )
+add_executable(pclSegmentationPlane_test segmentation/pclSegmentationPlane_test.cpp)
+target_link_libraries(pclSegmentationPlane_test PRIVATE ${PCL_LIBRARIES} ${VTK_LIBRARIES})
