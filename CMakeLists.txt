@@ -138,3 +138,34 @@ vtk_module_autoinit(
 add_executable(pclSegmentationPlane_test segmentation/pclSegmentationPlane_test.cpp)
 target_link_libraries(pclSegmentationPlane_test PRIVATE ${PCL_LIBRARIES} ${VTK_LIBRARIES})
 target_link_libraries(pclSegmentationPlane_test PRIVATE CGAL::CGAL)
+
+
+
+# ==================== CPack Packaging Config ====================
+include(InstallRequiredSystemLibraries)  # 可选：打包 GCC 运行时（仅静态/自包含需求时用）
+
+# 基础包信息
+set(CPACK_PACKAGE_NAME "fastlio-qt")
+set(CPACK_PACKAGE_VERSION "1.0.0")
+set(CPACK_PACKAGE_VENDOR "dzl")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "FastLIO SLAM with Qt GUI and PCL/VTK visualization")
+set(CPACK_PACKAGE_CONTACT "3113660834@qq.com")
+set(CPACK_GENERATOR "ZIP;DEB;NSIS") # 同时生成多种格式
+# 维护者（Debian 包需要）
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "dzl <3113660834@qq.com>")
+
+# 依赖项（关键！避免运行时缺库）
+# 根据你的 target_link_libraries 和系统环境填写
+set(CPACK_DEBIAN_PACKAGE_DEPENDS
+        "libc6 (>= 2.31), libstdc++6 (>= 9), libqt6core6 (>= 6.2), libqt6widgets6 (>= 6.2), libopencv-core406 (>= 4.6), libvtk9.3 (>= 9.3), libpcl1.15 (>= 1.15), libzmq5 (>= 4.3), libcgal14 (>= 5.5)"
+)
+
+# 安装规则：将可执行文件安装到 /usr/bin/
+install(TARGETS fastlio_example RUNTIME DESTINATION bin)
+
+# 可选：安装额外资源（如 config、qml、qrc 资源等）
+# install(FILES config/default.yaml DESTINATION share/fastlio-qt/config)
+# install(DIRECTORY models/ DESTINATION share/fastlio-qt/models)
+
+# 启用 CPack
+include(CPack)
