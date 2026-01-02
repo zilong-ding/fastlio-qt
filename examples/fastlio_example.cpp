@@ -137,9 +137,7 @@ public:
     QMainWindow(parent),ui(new Ui::MainWindow)
     {
         ui->setupUi(this);
-        vtkWidget = std::make_shared<QVTKRenderWidget>();
-        auto layout = ui->centralwidget->layout();
-        layout->addWidget(vtkWidget.get());
+        auto vtkWidget = ui->openGLWidget1;
 
         auto polyData = CreateXYGridPlane(
         500.0,
@@ -189,7 +187,8 @@ public:
         // viewer->spinOnce(50);
         // viewer->spinOnce();
         renderWindow->Render();
-        vtkWidget->update();
+        ui->openGLWidget1->update();
+        // vtkWidget->update();
     }
 
     signals:
@@ -202,7 +201,7 @@ public slots:
 
 private:
     Ui::MainWindow *ui;
-    std::shared_ptr<QVTKRenderWidget> vtkWidget;
+    // std::shared_ptr<QVTKRenderWidget> vtkWidget;
     pcl::visualization::PCLVisualizer::Ptr viewer;
     pcl::PointXYZ lastPoint;
     vtkNew<vtkRenderer> renderer ;

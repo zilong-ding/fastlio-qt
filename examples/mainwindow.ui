@@ -6,17 +6,53 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>1233</width>
+    <height>819</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout"/>
+   <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,4">
+    <item>
+     <widget class="QGroupBox" name="groupBox">
+      <property name="title">
+       <string>设置</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="groupBox_2">
+      <property name="title">
+       <string>显示</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QVTKRenderWidget" name="openGLWidget0"/>
+       </item>
+       <item row="0" column="1">
+        <widget class="QVTKRenderWidget" name="openGLWidget1"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QVTKRenderWidget" name="openGLWidget2"/>
+       </item>
+       <item row="1" column="1">
+        <widget class="QVTKRenderWidget" name="openGLWidget3"/>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QVTKRenderWidget</class>
+   <extends>QOpenGLWidget</extends>
+   <header>QVTKRenderWidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
